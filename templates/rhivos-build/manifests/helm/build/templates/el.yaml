@@ -30,8 +30,8 @@ spec:
               value: body.object_kind == 'tag_push'
             - name: overlays
               value:
-                - expression: 'body.ref.split(''/'')[2]'
-                  key: tag_version
+                - key: tag
+                  expression: 'body.ref.split(''/'')[2]'
           ref:
             kind: ClusterInterceptor
             name: cel
