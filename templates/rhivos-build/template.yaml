@@ -42,8 +42,7 @@ spec:
           type: string
           default: ./manifests
           description: Manifest file location
-
-    - title: Provide RHIVOS Build Information
+    - title: Provide RHIVOS Build Parameters
       required:
         - distro
         - arch
@@ -87,8 +86,7 @@ spec:
             - image
             - qcow2
             - container
-
-    - title: Provide Build Environment Information
+    - title: Provide Cluster Information
       required:
         - cluster_id
         - base_domain
@@ -116,23 +114,7 @@ spec:
               default: development
               enum:
                 - development
-
-    - title: Provide Artefact Registry Information
-      required:
-        - image_organization
-        - image_tag
-      properties:
-        image_organization:
-          title: Organization
-          type: string
-          description: Name of the Quay Organization
-          default: quayadmin
-        image_tag:
-          title: Image Tag
-          default: latest
-          type: string
-          description: Build Image tag
-
+  
   steps:
     - id: template
       name: Fetch Skeleton + Template
@@ -162,13 +144,13 @@ spec:
           # gitlab-gitlab.apps.cluster-
           repo_url: gitlab-gitlab.apps.cluster-${{ parameters.cluster_id }}.${{ parameters.cluster_id }}.${{ parameters.base_domain }}
           repo_destination: ${{ parameters.repo.owner }}/${{ parameters.artifact_id }}
-          quay_destination: ${{ parameters.image_organization}}/${{ parameters.artifact_id }}
+          quay_destination: quayadmin/${{ parameters.artifact_id }}
 
     - id: publish
       name: Publish Source
       action: publish:gitlab
       input:
-        repoUrl: "${{ values.repo_url }}?owner=${{ parameters.repo.owner }}&repo=${{parameters.artifact_id}}"
+        repoUrl: "gitlab-gitlab.apps.cluster-${{ parameters.cluster_id }}.${{ parameters.cluster_id }}.${{ parameters.base_domain }}?owner=${{ parameters.repo.owner }}&repo=${{parameters.artifact_id}}"
         defaultBranch: main
         repoVisibility: public
 
@@ -208,12 +190,12 @@ spec:
           repository_name: ${{parameters.artifact_id}}
           repository_host: gitlab-gitlab.apps.cluster-${{ parameters.cluster_id }}.${{ parameters.cluster_id }}.${{ parameters.base_domain }}
 
-          image_registry: quay
-          image_organization: ${{ parameters.image_organization }}
-          image_host: quay-${{ parameters.cluster_id }}.apps.cluster-${{ parameters.cluster_id }}.${{ parameters.cluster_id }}.${{ parameters.base_domain }}
           image_name: ${{ parameters.artifact_id }}
-          image_tag: ${{ parameters.image_tag }}
-
+          image_registry: quay
+          image_organization: quayadmin
+          image_tag: latest
+          image_host: quay-${{ parameters.cluster_id }}.apps.cluster-${{ parameters.cluster_id }}.${{ parameters.cluster_id }}.${{ parameters.base_domain }}
+          
         targetPath: ./tenant-gitops
 
     - id: publish-gitops
