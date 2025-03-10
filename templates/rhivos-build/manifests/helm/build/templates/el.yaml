@@ -40,7 +40,7 @@ spec:
         ref: {{ .Values.app.name }}-build
     - bindings:
         - kind: TriggerBinding
-          ref: tag-binding-validate
+          ref: release-binding-validate
       interceptors:
         - params:
             - name: filter

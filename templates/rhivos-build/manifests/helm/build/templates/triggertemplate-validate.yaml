@@ -1,28 +1,22 @@
----
-apiVersion: triggers.tekton.dev/v1alpha1
+apiVersion: triggers.tekton.dev/v1beta1
 kind: TriggerTemplate
 metadata:
   name: {{ .Values.app.name }}-validate
 spec:
   params:
     - name: git-repo-url
-      description: Repository where the event was triggered
+      description: The repo url
     - name: git-revision
-      description: Revision of the change
+      description: The git revision
+      default: {{ .Values.git.branch }}
     - name: git-committer
       description: Email of user who committed the change
     
-    - name: source-image
-      description: The source image to promote
-      default: {{ include "image.dev-url" . }}
-    - name: destination-image
-      description: The destination to copy the image to
-      default: {{ include "image.preprod-url" . }}
     
-    - name: source-tag
-      description: The image tag to promote
-    - name: destination-tag
-      description: The git tag representing the new version or release
+    - name: output-image
+      description: reference of the image that will get created
+      default: {{ include "image.dev-url" . }}
+    
   resourcetemplates:
     - apiVersion: tekton.dev/v1beta1
       kind: PipelineRun
@@ -31,26 +25,13 @@ spec:
         labels:
           backstage.io/kubernetes-id: {{ .Values.app.name }}
       spec:
-{{- if eq .Values.image.registry "Quay" }}
-        taskRunSpecs:
-        - pipelineTaskName: verify-enterprise-contract
-          taskServiceAccountName: job-runner
-{{- end }}
         params:
-          - name: git-repo-url
+          - name: source-repo
             value: $(tt.params.git-repo-url)
-          - name: git-revision
+          - name: source-branch
             value: $(tt.params.git-revision)
-          - name: source-image
-            value: $(tt.params.source-image)
-          - name: destination-image
-            value: $(tt.params.destination-image)
-          - name: source-image-tag
-            value: $(tt.params.source-tag)
-          - name: destination-image-tag
-            value: $(tt.params.destination-tag)
-          - name: namespace
-            value: $(tt.params.namespace)
+          - name: output-image
+            value: $(tt.params.output-image)
           - name: git-host
             value: gitlab-gitlab{{ .Values.app.cluster }}
           - name: git-owner
@@ -59,11 +40,11 @@ spec:
             value: {{ .Values.app.name }}
           - name: common-password-secret
             value: common-password-secret
-          - name: argocd-host
-            value: argocd-server-janus-argocd{{ .Values.app.cluster }}
+          - name: oidc-issuer
+            value:  https://keycloak-rhsso{{ .Values.app.cluster }}/auth/realms/openshift
         pipelineRef:
           name: {{ .Values.app.name }}-validate
-        serviceAccountName: image-pusher
+        serviceAccountName: pipeline
         timeout: 1h0m0s
         workspaces:
           - name: reports
