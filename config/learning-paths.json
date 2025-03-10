@@ -1,0 +1,25 @@
+[
+  {
+    "paths": 4,
+    "hours": 0,
+    "minutes": 45,
+    "description": "Immerse yourself in practical aspects of OpenShift such as cluster access, file transfers, database operations, and resource management through interactive, hands-on labs.",
+    "label": "Using OpenShift",
+    "url": "https://developers.redhat.com/learn/openshift/using-openshift"
+  },
+  {
+    "paths": 13,
+    "hours": 4,
+    "minutes": 0,
+    "description": "Start with the foundations to get hands-on experience creating and deploying applications in Red Hat OpenShift in Red Hat's interactive learning environments. In this learning path, you will learn:\r\n\r\n\u2022 The basic concepts behind OpenShift\r\n\u2022 How to create and deploy applications directly into an OpenShift cluster from source as well as Linux containers\r\n\u2022 How to work with Live Coding to compile and deploy the changes immediately and automatically into OpenShift\r\n\u2022 How to create data-driven applications using a variety of OpenShift data technologies",
+    "label": "Foundations of OpenShift",
+    "url": "https://developers.redhat.com/learn/openshift/foundations-openshift"
+  },
+  {
+    "paths": 11,
+    "hours": 2,
+    "description": "Learn the basics of Red Hat Enterprise Linux, and how to leverage it with tools like Podman, Buildah, and SQL.",
+    "label": "Get started with Red Hat Enterprise Linux",
+    "url": "https://developers.redhat.com/learn/rhel"
+  }
+]

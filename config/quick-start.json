@@ -1,0 +1,81 @@
+[
+  {
+    "title": "COMMUNITY",
+    "isExpanded": true,
+    "links": [
+      {
+        "iconUrl": "/homepage/icons/icons8/web.png",
+        "label": "CentOS Automotive SIG",
+        "url": "https://sigs.centos.org/automotive/"
+      },
+      {
+        "iconUrl": "/homepage/icons/icons8/github.png",
+        "label": "CentOS Automotive GitLab",
+        "url": "https://gitlab.com/CentOS/automotive"
+      }
+    ]
+  },
+  {
+    "title": "DEVELOPER TOOLS",
+    "isExpanded": true,
+    "links": [
+      {
+        "iconUrl": "/homepage/icons/podman_logo.svg",
+        "label": "Podman Desktop",
+        "url": "https://podman-desktop.io"
+      }
+    ]
+  },
+  {
+    "title": "CI/CD TOOLS",
+    "isExpanded": false,
+    "links": [
+      {
+        "iconUrl": "/homepage/icons/argo-icon-color.svg",
+        "label": "ArgoCD",
+        "url": ""
+      },
+      {
+        "iconUrl": "/homepage/icons/quay.svg",
+        "label": "Quay.io",
+        "url": "https://quay.io/"
+      }
+    ]
+  },
+  {
+    "title": "OPENSHIFT CLUSTERS",
+    "isExpanded": true,
+    "links": [
+      {
+        "iconUrl": "/homepage/icons/icons8/openshift.png",
+        "label": "OpenShift",
+        "url": ""
+      }
+    ]
+  },
+  {
+    "title": "MONITORING TOOLS",
+    "links": [
+      {
+        "iconUrl": "/homepage/icons/icons8/system-task.png",
+        "label": "Grafana",
+        "url": ""
+      }
+    ]
+  },
+  {
+    "title": "SECURITY TOOLS",
+    "links": [
+      {
+        "iconUrl": "/homepage/icons/keycloak.svg",
+        "label": "Keycloak",
+        "url": ""
+      },
+      {
+        "iconUrl": "/homepage/icons/icons8/safe-out.png",
+        "label": "Vault",
+        "url": ""
+      }
+    ]
+  }
+]

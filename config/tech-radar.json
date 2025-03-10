@@ -1,0 +1,331 @@
+{
+  "entries": [
+    {
+      "timeline": [
+        {
+          "moved": 0,
+          "ringId": "adopt",
+          "date": "2020-08-06T00:00:00.000Z",
+          "description": "Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat"
+        }
+      ],
+      "key": "python3",
+      "id": "python3",
+      "title": "Python 3.x",
+      "quadrant": "languages",
+      "description": "Itaque earum rerum hic tenetur a sapiente delectus, ut aut reiciendis voluptatibus maiores alias consequatur aut perferendis doloribus asperiores repellat"
+    },
+    {
+      "timeline": [
+        {
+          "moved": 0,
+          "ringId": "adopt",
+          "date": "2025-01-29T00:00:00.000Z",
+          "description": "Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat"
+        }
+      ],
+      "key": "go",
+      "id": "go",
+      "title": "Go ",
+      "quadrant": "languages",
+      "description": "Itaque earum rerum hic tenetur a sapiente delectus, ut aut reiciendis voluptatibus maiores alias consequatur aut perferendis doloribus asperiores repellat"
+    },
+    {
+      "timeline": [
+        {
+          "moved": 0,
+          "ringId": "hold",
+          "date": "2020-08-06T00:00:00.000Z",
+          "description": "Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat"
+        }
+      ],
+      "key": "python2",
+      "id": "python2",
+      "title": "Python 2.x",
+      "quadrant": "languages",
+      "description": "Itaque earum rerum hic tenetur a sapiente delectus, ut aut reiciendis voluptatibus maiores alias consequatur aut perferendis doloribus asperiores repellat"
+    },
+    {
+      "timeline": [
+        {
+          "moved": 0,
+          "ringId": "adopt",
+          "date": "2020-08-06T00:00:00.000Z"
+        }
+      ],
+      "links": [
+        {
+          "url": "https://reactjs.org/",
+          "title": "Learn more"
+        }
+      ],
+      "key": "react",
+      "id": "react",
+      "title": "React",
+      "quadrant": "frameworks"
+    },
+    {
+      "timeline": [
+        {
+          "moved": 0,
+          "ringId": "adopt",
+          "date": "2020-08-06T00:00:00.000Z"
+        }
+      ],
+      "links": [
+        {
+          "url": "https://reactjs.org/",
+          "title": "Learn more"
+        }
+      ],
+      "key": "nodejs",
+      "id": "nodejs",
+      "title": "NodeJS",
+      "quadrant": "frameworks"
+    },
+    {
+      "timeline": [
+        {
+          "moved": 0,
+          "ringId": "trial",
+          "date": "2020-08-06T00:00:00.000Z"
+        }
+      ],
+      "links": [
+        {
+          "url": "https://reactjs.org/",
+          "title": "Learn more"
+        }
+      ],
+      "key": "quarkus",
+      "id": "quarkus",
+      "title": "Quarkus",
+      "quadrant": "frameworks"
+    },
+    {
+      "timeline": [
+        {
+          "moved": 0,
+          "ringId": "adopt",
+          "date": "2020-08-06T00:00:00.000Z"
+        }
+      ],
+      "key": "mysql",
+      "id": "mysql",
+      "title": "MySQL",
+      "quadrant": "storage"
+    },
+    {
+      "timeline": [
+        {
+          "moved": 0,
+          "ringId": "assess",
+          "date": "2020-08-06T00:00:00.000Z"
+        }
+      ],
+      "key": "postgresql",
+      "id": "postgresql",
+      "title": "Postgresql",
+      "quadrant": "storage"
+    },
+    {
+      "timeline": [
+        {
+          "moved": 0,
+          "ringId": "adopt",
+          "date": "2020-08-06T00:00:00.000Z"
+        }
+      ],
+      "key": "s3-bucket",
+      "id": "s3-bucket",
+      "title": "AWS S3",
+      "quadrant": "storage"
+    },
+    {
+      "timeline": [
+        {
+          "moved": 0,
+          "ringId": "assess",
+          "date": "2020-08-06T00:00:00.000Z"
+        }
+      ],
+      "key": "noobaa-s3-bucket",
+      "id": "noobaa-s3-bucket",
+      "title": "Noobaa S3",
+      "quadrant": "storage"
+    },
+    {
+      "timeline": [
+        {
+          "ringId": "adopt",
+          "date": "2020-08-06T00:00:00.000Z",
+          "description": "long description"
+        }
+      ],
+      "links": [
+        {
+          "url": "https://github.com",
+          "title": "Learn more"
+        }
+      ],
+      "key": "github-actions",
+      "id": "github-actions",
+      "title": "GitHub Actions",
+      "quadrant": "infrastructure"
+    },
+    {
+      "timeline": [
+        {
+          "ringId": "adopt",
+          "date": "2020-08-06T00:00:00.000Z",
+          "description": "long description"
+        }
+      ],
+      "links": [
+        {
+          "url": "https://github.com",
+          "title": "Learn more"
+        }
+      ],
+      "key": "argocd",
+      "id": "argocd",
+      "title": "ArgoCD",
+      "quadrant": "infrastructure"
+    },
+    {
+      "timeline": [
+        {
+          "ringId": "adopt",
+          "date": "2020-08-06T00:00:00.000Z",
+          "description": "long description"
+        }
+      ],
+      "links": [
+        {
+          "url": "https://github.com",
+          "title": "Learn more"
+        }
+      ],
+      "key": "openshift",
+      "id": "openshift",
+      "title": "Openshift 4+",
+      "quadrant": "infrastructure"
+    },
+    {
+      "timeline": [
+        {
+          "ringId": "adopt",
+          "date": "2020-08-06T00:00:00.000Z",
+          "description": "long description"
+        }
+      ],
+      "links": [
+        {
+          "url": "https://github.com",
+          "title": "Learn more"
+        }
+      ],
+      "key": "vault",
+      "id": "vault",
+      "title": "Hashicorp Vault",
+      "quadrant": "infrastructure"
+    },
+    {
+      "timeline": [
+        {
+          "ringId": "assess",
+          "date": "2020-08-06T00:00:00.000Z",
+          "description": "long description"
+        }
+      ],
+      "links": [
+        {
+          "url": "https://github.com",
+          "title": "Learn more"
+        }
+      ],
+      "key": "tekton",
+      "id": "tekton",
+      "title": "Tekton",
+      "quadrant": "infrastructure"
+    },
+    {
+      "timeline": [
+        {
+          "ringId": "hold",
+          "date": "2020-08-06T00:00:00.000Z",
+          "description": "long description"
+        }
+      ],
+      "links": [
+        {
+          "url": "https://github.com",
+          "title": "Learn more"
+        }
+      ],
+      "key": "jenkins",
+      "id": "jenkins",
+      "title": "Jenkins",
+      "quadrant": "infrastructure"
+    },
+    {
+      "timeline": [
+        {
+          "ringId": "trial",
+          "date": "2020-08-06T00:00:00.000Z",
+          "description": "long description"
+        }
+      ],
+      "links": [
+        {
+          "url": "https://github.com",
+          "title": "Learn more"
+        }
+      ],
+      "key": "rosa",
+      "id": "rosa",
+      "title": "ROSA",
+      "quadrant": "infrastructure"
+    }
+  ],
+  "quadrants": [
+    {
+      "id": "infrastructure",
+      "name": "Infrastructure"
+    },
+    {
+      "id": "frameworks",
+      "name": "Frameworks"
+    },
+    {
+      "id": "languages",
+      "name": "Languages"
+    },
+    {
+      "id": "storage",
+      "name": "Storage"
+    }
+  ],
+  "rings": [
+    {
+      "id": "adopt",
+      "name": "ADOPT",
+      "color": "#93c47d"
+    },
+    {
+      "id": "trial",
+      "name": "TRIAL",
+      "color": "#93d2c2"
+    },
+    {
+      "id": "assess",
+      "name": "ASSESS",
+      "color": "#fbdb84"
+    },
+    {
+      "id": "hold",
+      "name": "HOLD",
+      "color": "#efafa9"
+    }
+  ]
+}

@@ -1,0 +1,24 @@
+---
+apiVersion: triggers.tekton.dev/v1beta1
+kind: EventListener
+metadata:
+  name: {{ .Values.app.name }}-el
+spec:
+  serviceAccountName: pipeline
+  triggers:
+    - bindings:
+        - kind: TriggerBinding
+          ref: commit-binding
+      interceptors:
+        - params:
+            - name: filter
+              value: has(body.commits) && body.object_kind == 'push'
+            - name: overlays
+              value: null
+          ref:
+            kind: ClusterInterceptor
+            name: cel
+      name: commit-trig
+      template:
+        ref: {{ .Values.app.name }}-run-build
+    # removed all the other triggers ...

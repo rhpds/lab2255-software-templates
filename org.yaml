@@ -1,0 +1,12 @@
+apiVersion: backstage.io/v1alpha1
+kind: Group
+metadata:
+  name: automotive
+  description: Red Hat Automotive Developer Platform Samples
+spec:
+  type: team
+  profile:
+    # Intentional no displayName for testing
+    email: auto@demo.redhat.com
+    picture: https://avatars.dicebear.com/api/identicon/team-a@example.com.svg?background=%23fff&margin=25
+  children: []
