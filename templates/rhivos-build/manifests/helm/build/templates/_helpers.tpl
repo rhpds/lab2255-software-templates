@@ -18,15 +18,3 @@ Image Url image will be pushed to defaults to internal registry
 {{- printf "default-route-openshift-image-registry%s/%s-dev/%s" .Values.app.cluster .Values.image.name .Values.image.name }}
 {{- end }}
 {{- end }}
-
-{{- define "image.preprod-url" -}}
-{{- with .Values.image }}
-{{- printf "%s/%s-preprod/%s" .host .name .name }}
-{{- end }}
-{{- end }}
-
-{{- define "image.prod-url" -}}
-{{- with .Values.image }}
-{{- printf "%s/%s-prod/%s" .host .name .name }}
-{{- end }}
-{{- end }}
