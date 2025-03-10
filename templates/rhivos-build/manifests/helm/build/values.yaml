@@ -5,13 +5,12 @@ app:
 
 git:
   branch: main
-  repo: ${{ values.source_repository }}
-  org: ${{ values.git_owner }}
+  repo: ${{ values.code_repository }}
+  org: ${{ values.repository_owner }}
   name: ${{ values.repository_name }}
   host: ${{ values.repository_host }}
   token: ''
   webhookSecret: ''
-  #verify_commits: ${{ values.verify_commits }}
 
 image:
   registry: ${{values.image_registry}}

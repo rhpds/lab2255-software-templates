@@ -11,7 +11,7 @@ metadata:
 spec:
   project: janus
   source:
-    repoURL: ${{ values.git_repository }}
+    repoURL: ${{ values.gitops_repository }}
     targetRevision: HEAD
     path: ./helm/build
   destination:

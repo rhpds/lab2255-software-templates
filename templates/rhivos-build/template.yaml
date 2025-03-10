@@ -10,7 +10,6 @@ metadata:
 spec:
   owner: automotive
   type: service
-
   parameters:
     - title: Provide Project Information
       required:
@@ -114,7 +113,6 @@ spec:
               default: development
               enum:
                 - development
-  
   steps:
     - id: template
       name: Fetch Skeleton + Template
@@ -124,24 +122,20 @@ spec:
         copyWithoutTemplating:
           - .github/workflows/*
         values:
+          # project
           artifact_id: ${{ parameters.artifact_id }}
           description: ${{ parameters.description }}
           manifest_name: ${{ parameters.manifest_name }}
           manifest_location: ${{ parameters.manifest_location }}
-
+          owner: ${{ user.entity.metadata.name }}
+          # rhivos
           distro: ${{ parameters.distro }}
           arch: ${{ parameters.arch }}
           target: ${{ parameters.target }}
           mode: ${{ parameters.mode }}
           export_format: ${{ parameters.export_format }}
-
-          namespace: ${{ parameters.artifact_id }}-dev
-          owner: ${{ user.entity.metadata.name }}
-
-          # cluster-zgzkk.zgzkk.sandbox2007.opentlc.com
-          #cluster: .apps.${{ parameters.base_domain }}
+          # cluster
           cluster: .apps.cluster-${{ parameters.cluster_id }}.${{ parameters.cluster_id }}.${{ parameters.base_domain }}
-          # gitlab-gitlab.apps.cluster-
           repo_url: gitlab-gitlab.apps.cluster-${{ parameters.cluster_id }}.${{ parameters.cluster_id }}.${{ parameters.base_domain }}
           repo_destination: ${{ parameters.repo.owner }}/${{ parameters.artifact_id }}
           quay_destination: quayadmin/${{ parameters.artifact_id }}
@@ -168,34 +162,33 @@ spec:
         url: ./manifests
         copyWithoutTemplating: []
         values:
+          # project
           artifact_id: ${{ parameters.artifact_id }}
           description: ${{ parameters.description }}
           manifest_name: ${{ parameters.manifest_name }}
           manifest_location: ${{ parameters.manifest_location }}
-
+          # rhivos
           distro: ${{ parameters.distro }}
           arch: ${{ parameters.arch }}
           target: ${{ parameters.target }}
           mode: ${{ parameters.mode }}
           export_format: ${{ parameters.export_format }}
-
+          # git
           user: ${{ user.entity.metadata.name }}
-          git_owner: ${{ parameters.repo.owner }}
-
-          cluster: .apps.cluster-${{ parameters.cluster_id }}.${{ parameters.cluster_id }}.${{ parameters.base_domain }}
-
-          source_repository: "https://gitlab-gitlab.apps.cluster-${{ parameters.cluster_id }}.${{ parameters.cluster_id }}.${{ parameters.base_domain }}/${{ parameters.repo.owner }}/${{parameters.artifact_id}}.git"
-          git_repository: "https://gitlab-gitlab.apps.cluster-${{ parameters.cluster_id }}.${{ parameters.cluster_id }}.${{ parameters.base_domain }}/${{ parameters.repo.owner }}/${{parameters.artifact_id}}-gitops.git"
-
+          repository_owner: ${{ parameters.repo.owner }}
           repository_name: ${{parameters.artifact_id}}
           repository_host: gitlab-gitlab.apps.cluster-${{ parameters.cluster_id }}.${{ parameters.cluster_id }}.${{ parameters.base_domain }}
-
+          code_repository: "https://gitlab-gitlab.apps.cluster-${{ parameters.cluster_id }}.${{ parameters.cluster_id }}.${{ parameters.base_domain }}/${{ parameters.repo.owner }}/${{parameters.artifact_id}}.git"
+          gitops_repository: "https://gitlab-gitlab.apps.cluster-${{ parameters.cluster_id }}.${{ parameters.cluster_id }}.${{ parameters.base_domain }}/${{ parameters.repo.owner }}/${{parameters.artifact_id}}-gitops.git"
+          # cluster
+          cluster: .apps.cluster-${{ parameters.cluster_id }}.${{ parameters.cluster_id }}.${{ parameters.base_domain }}
+          # artefacts
           image_name: ${{ parameters.artifact_id }}
           image_registry: quay
           image_organization: quayadmin
           image_tag: latest
           image_host: quay-${{ parameters.cluster_id }}.apps.cluster-${{ parameters.cluster_id }}.${{ parameters.cluster_id }}.${{ parameters.base_domain }}
-          
+
         targetPath: ./tenant-gitops
 
     - id: publish-gitops
