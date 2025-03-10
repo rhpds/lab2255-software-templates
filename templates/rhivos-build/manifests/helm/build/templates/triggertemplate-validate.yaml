@@ -9,12 +9,16 @@ spec:
       description: Repository where the event was triggered
     - name: git-revision
       description: Revision of the change
+    - name: git-committer
+      description: Email of user who committed the change
+    
     - name: source-image
       description: The source image to promote
       default: {{ include "image.dev-url" . }}
     - name: destination-image
       description: The destination to copy the image to
       default: {{ include "image.preprod-url" . }}
+    
     - name: source-tag
       description: The image tag to promote
     - name: destination-tag
@@ -58,7 +62,7 @@ spec:
           - name: argocd-host
             value: argocd-server-janus-argocd{{ .Values.app.cluster }}
         pipelineRef:
-          name: {{ .Values.app.name }}-promote
+          name: {{ .Values.app.name }}-validate
         serviceAccountName: image-pusher
         timeout: 1h0m0s
         workspaces:
