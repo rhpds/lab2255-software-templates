@@ -1,7 +1,7 @@
 apiVersion: triggers.tekton.dev/v1beta1
 kind: TriggerTemplate
 metadata:
-  name: {{ .Values.app.name }}-validate
+  name: {{ .Values.app.name }}-release
 spec:
   params:
     - name: git-repo-url
@@ -12,12 +12,12 @@ spec:
     - name: git-committer
       description: Email of user who committed the change
     - name: source-tag
-      description: The tag version
+      description: The source tag
   resourcetemplates:
     - apiVersion: tekton.dev/v1beta1
       kind: PipelineRun
       metadata:
-        generateName: {{ .Values.app.name }}-validate-
+        generateName: "{{ .Values.app.name }}-release-"
         labels:
           backstage.io/kubernetes-id: {{ .Values.app.name }}
       spec:
@@ -33,7 +33,7 @@ spec:
           - name: source-tag
             value: $(tt.params.source-tag)
         pipelineRef:
-          name: {{ .Values.app.name }}-validate
+          name: {{ .Values.app.name }}-release
         serviceAccountName: pipeline
         timeout: 1h0m0s
         workspaces:

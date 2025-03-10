@@ -12,40 +12,29 @@ spec:
       description: source repo that contains the application code
       type: string
       default: {{ .Values.git.repo }}
-    - name: source-branch
-      description: source branch to build from
+    - name: source-revision
+      description: source revision to build from
       default: {{ .Values.git.branch }}
       type: string
-    - name: git-host
+    - name: git-committer
+      description: email of user who committed the change
+    - name: artifact-id
+      default: {{ .Values.app.name }}
       type: string
-    - name: git-owner
-      type: string
-    
   tasks:
     - name: git-clone
       params:
         - name: url
           value: $(params.source-repo)
         - name: revision
-          value: $(params.source-branch)
+          value: $(params.source-revision)
       taskRef:
         kind: ClusterTask
         name: git-clone
       workspaces:
         - name: output
           workspace: source-folder
-  #results:
-  #  - name: IMAGE_URL
-  #    value: "$(tasks.build-sign-image.results.IMAGE_URL)"
-  #  - name: IMAGE_DIGEST
-  #    value: "$(tasks.build-sign-image.results.IMAGE_DIGEST)"
-  #  - name: CHAINS-GIT_URL
-  #    value: "$(tasks.git-clone.results.url)"
-  #  - name: CHAINS-GIT_COMMIT
-  #    value: "$(tasks.git-clone.results.commit)"
-  #  - name: ACS_SCAN_OUTPUT
-  #    value: "$(tasks.acs-image-scan.results.SCAN_OUTPUT)"
   workspaces:
     - name: source-folder
     - name: docker-config
-    - name: reports
+

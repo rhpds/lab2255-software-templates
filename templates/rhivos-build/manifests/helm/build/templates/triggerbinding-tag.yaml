@@ -7,11 +7,10 @@ spec:
     - name: git-repo-url
       value: $(body.repository.git_http_url)
     - name: git-revision
-      value: $(body.after)
+      value: $(body.checkout_sha)
     - name: git-committer
       value: $(body.user_email)
-    #- name: source-tag
-    #  value: latest
-    #- name: destination-tag
-    #  value: $(extensions.tag_version)
+    - name: source-tag
+      value: $(body.tag_version)
+
     

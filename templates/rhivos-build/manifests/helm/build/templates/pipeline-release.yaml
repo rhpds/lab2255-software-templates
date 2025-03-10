@@ -2,7 +2,7 @@
 apiVersion: tekton.dev/v1beta1
 kind: Pipeline
 metadata:
-  name: {{ .Values.app.name }}-validate
+  name: {{ .Values.app.name }}-release
   labels:
     type: pipeline
     backstage.io/kubernetes-id: {{ .Values.app.name }}
@@ -51,4 +51,3 @@ spec:
   workspaces:
     - name: source-folder
     - name: docker-config
-

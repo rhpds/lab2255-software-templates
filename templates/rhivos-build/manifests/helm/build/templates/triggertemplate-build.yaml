@@ -10,13 +10,7 @@ spec:
       description: The git revision
       default: {{ .Values.git.branch }}
     - name: git-committer
-      description: Email of user who committed the change
-    
-    
-    - name: output-image
-      description: reference of the image that will get created
-      default: {{ include "image.dev-url" . }}
-    
+      description: Email of user who committed the change        
   resourcetemplates:
     - apiVersion: tekton.dev/v1beta1
       kind: PipelineRun
@@ -28,27 +22,17 @@ spec:
         params:
           - name: source-repo
             value: $(tt.params.git-repo-url)
-          - name: source-branch
+          - name: source-revision
             value: $(tt.params.git-revision)
-          - name: output-image
-            value: $(tt.params.output-image)
-          - name: git-host
-            value: gitlab-gitlab{{ .Values.app.cluster }}
-          - name: git-owner
-            value: {{ .Values.git.org }}
-          - name: component-id
+          - name: git-committer
+            value: $(tt.params.git-committer)
+          - name: artifact-id
             value: {{ .Values.app.name }}
-          - name: common-password-secret
-            value: common-password-secret
-          - name: oidc-issuer
-            value:  https://keycloak-rhsso{{ .Values.app.cluster }}/auth/realms/openshift
         pipelineRef:
           name: {{ .Values.app.name }}-build
         serviceAccountName: pipeline
         timeout: 1h0m0s
         workspaces:
-          - name: reports
-            emptyDir: {}
           - name: source-folder
             volumeClaimTemplate:
               spec:
@@ -57,13 +41,7 @@ spec:
                 resources:
                   requests:
                     storage: 1Gi
-          - emptyDir: {}
-            name: maven-settings
-{{- if eq .Values.image.registry "Quay" }}
           - name: docker-config
             secret:
               secretName: {{ .Values.app.name }}-registry-creds
-{{- else }}
-          - name: docker-config
-            emptyDir: {}
-{{- end }}
+

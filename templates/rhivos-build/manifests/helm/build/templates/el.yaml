@@ -37,7 +37,7 @@ spec:
             name: cel
       name: tag-trigger
       template:
-        ref: {{ .Values.app.name }}-build
+        ref: {{ .Values.app.name }}-validate
     - bindings:
         - kind: TriggerBinding
           ref: release-binding
@@ -50,4 +50,4 @@ spec:
             name: cel
       name: release-trigger
       template:
-        ref: {{ .Values.app.name }}-validate
+        ref: {{ .Values.app.name }}-release

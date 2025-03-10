@@ -10,8 +10,8 @@ spec:
       value: $(body.commit.id)
     - name: git-committer
       value: $(body.commit.author.email)
-    #- name: source-tag
-    #  value: $(body.tag)
+    - name: source-tag
+      value: $(body.tag)
     #- name: destination-tag
     #  value: validate-$(body.tag)
     
