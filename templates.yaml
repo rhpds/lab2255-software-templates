@@ -7,4 +7,3 @@ spec:
   type: url
   targets:
     - templates/rhivos-build/template.yaml
-    - templates/autosd-container/template.yaml

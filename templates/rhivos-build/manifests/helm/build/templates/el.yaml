@@ -18,12 +18,12 @@ spec:
           ref:
             kind: ClusterInterceptor
             name: cel
-      name: commit-trig
+      name: commit-trigger
       template:
         ref: {{ .Values.app.name }}-build
     - bindings:
         - kind: TriggerBinding
-          ref: tag-binding-build
+          ref: tag-binding
       interceptors:
         - params:
             - name: filter
@@ -35,12 +35,12 @@ spec:
           ref:
             kind: ClusterInterceptor
             name: cel
-      name: tag-trig-preprod
+      name: tag-trigger
       template:
         ref: {{ .Values.app.name }}-build
     - bindings:
         - kind: TriggerBinding
-          ref: release-binding-validate
+          ref: release-binding
       interceptors:
         - params:
             - name: filter
@@ -48,6 +48,6 @@ spec:
           ref:
             kind: ClusterInterceptor
             name: cel
-      name: tag-trig-prod
+      name: release-trigger
       template:
         ref: {{ .Values.app.name }}-validate
