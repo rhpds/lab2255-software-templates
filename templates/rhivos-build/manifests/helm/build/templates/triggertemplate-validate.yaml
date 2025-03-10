@@ -2,7 +2,7 @@
 apiVersion: triggers.tekton.dev/v1alpha1
 kind: TriggerTemplate
 metadata:
-  name: {{ .Values.app.name }}-run-promote
+  name: {{ .Values.app.name }}-validate
 spec:
   params:
     - name: git-repo-url
@@ -19,13 +19,11 @@ spec:
       description: The image tag to promote
     - name: destination-tag
       description: The git tag representing the new version or release
-    - name: namespace
-      description: The target namespace being deployed to
   resourcetemplates:
     - apiVersion: tekton.dev/v1beta1
       kind: PipelineRun
       metadata:
-        generateName: {{ .Values.app.name }}-run-promote-
+        generateName: {{ .Values.app.name }}-validate-
         labels:
           backstage.io/kubernetes-id: {{ .Values.app.name }}
       spec:
@@ -64,5 +62,23 @@ spec:
         serviceAccountName: image-pusher
         timeout: 1h0m0s
         workspaces:
-          - name: images-url
+          - name: reports
             emptyDir: {}
+          - name: source-folder
+            volumeClaimTemplate:
+              spec:
+                accessModes:
+                  - ReadWriteOnce
+                resources:
+                  requests:
+                    storage: 1Gi
+          - emptyDir: {}
+            name: maven-settings
+{{- if eq .Values.image.registry "Quay" }}
+          - name: docker-config
+            secret:
+              secretName: {{ .Values.app.name }}-registry-creds
+{{- else }}
+          - name: docker-config
+            emptyDir: {}
+{{- end }}

@@ -1,7 +1,7 @@
 apiVersion: triggers.tekton.dev/v1alpha1
 kind: TriggerBinding
 metadata:
-  name: tag-binding-prod
+  name: tag-binding-validate
 spec:
   params:
     - name: git-repo-url

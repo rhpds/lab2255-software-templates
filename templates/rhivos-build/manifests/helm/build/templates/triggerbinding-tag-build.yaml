@@ -1,13 +1,15 @@
 apiVersion: triggers.tekton.dev/v1alpha1
 kind: TriggerBinding
 metadata:
-  name: tag-binding-preprod
+  name: tag-binding-build
 spec:
   params:
     - name: git-repo-url
       value: $(body.repository.git_http_url)
     - name: git-revision
       value: $(body.after)
+    - name: git-committer
+      value: $(body.user_email)
     - name: source-tag
       value: latest
     - name: destination-tag

@@ -20,10 +20,10 @@ spec:
             name: cel
       name: commit-trig
       template:
-        ref: {{ .Values.app.name }}-run-build
+        ref: {{ .Values.app.name }}-build
     - bindings:
         - kind: TriggerBinding
-          ref: tag-binding-preprod
+          ref: tag-binding-build
       interceptors:
         - params:
             - name: filter
@@ -37,10 +37,10 @@ spec:
             name: cel
       name: tag-trig-preprod
       template:
-        ref: {{ .Values.app.name }}-run-promote
+        ref: {{ .Values.app.name }}-build
     - bindings:
         - kind: TriggerBinding
-          ref: tag-binding-prod
+          ref: tag-binding-validate
       interceptors:
         - params:
             - name: filter
@@ -50,4 +50,4 @@ spec:
             name: cel
       name: tag-trig-prod
       template:
-        ref: {{ .Values.app.name }}-run-promote
+        ref: {{ .Values.app.name }}-validate
