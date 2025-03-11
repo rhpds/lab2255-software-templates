@@ -1,0 +1,27 @@
+kind: ConfigMap
+metadata:
+  name:  {{ .Values.app.name }}-ansible-scripts
+apiVersion: v1
+data:
+  inventory.yaml: |
+    automotive-image-builder:
+      hosts:
+        {{ .Values.builder.host }}:
+          # ansible configuration
+          ansible_user: {{ .Values.builder.user }}
+          ansible_password: "{{ .Values.builder.password }}"
+  builder.yaml: |
+    - name: builder
+      hosts: automotive-image-builder
+      gather_facts: no
+      tasks:
+        - name: save the REVISION as JOB_ID
+          set_fact:
+            job_id: "{{ "{{" }} lookup('env', 'REVISION') {{ "}}" }}"
+
+        - name: build the OS image
+          become: true
+          shell: |
+            echo 'HELLO {{ "{{" }} job_id {{ "}}" }}' > {{ "{{" }} job_id {{ "}}" }}.txt
+          args:
+            chdir: "/home/workspace"

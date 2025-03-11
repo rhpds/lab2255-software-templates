@@ -1,0 +1,60 @@
+kind: Task
+apiVersion: tekton.dev/v1beta1
+metadata:
+  name: aib-builder-task
+spec:
+  params:
+    - name: revision
+      description: 'Revision to checkout. (branch, tag, sha, ref, etc...)'
+      type: string
+      default: ''
+    - name: secret-config-ref
+      description: Bla bla
+      type: string
+      default: 'aib-config'
+  steps:
+    - name: aib-build
+      image: quay.io/agnosticd/ee-multicloud:latest
+      env:
+        - name: AIB_USER
+          valueFrom:
+            secretKeyRef:
+              key: user
+              name: $(params.secret-config-ref)
+        - name: AIB_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              key: password
+              name: $(params.secret-config-ref)
+        - name: AIB_HOST
+          valueFrom:
+            secretKeyRef:
+              key: host
+              name: $(params.secret-config-ref)
+      script: |
+        #!/usr/bin/env bash
+
+        set -x
+
+        echo "> $AIB_PASSWORD <"
+
+        export ANSIBLE_HOST_KEY_CHECKING=False
+
+        export REVISION="$(params.revision)"
+
+        ansible-playbook -i /scripts/inventory.yaml /scripts/builder.yaml
+
+      volumeMounts: 
+        - name: scripts-volume
+          mountPath: /scripts
+  volumes:
+    - name: scripts-volume
+      configMap:
+        name: {{ .Values.app.name }}-ansible-scripts
+        items:
+          - key: builder.yaml
+            path: builder.yaml
+          #- key: inventory.yaml
+          #  path: inventory.yaml
+  workspaces:
+    - name: source
