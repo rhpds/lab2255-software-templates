@@ -52,10 +52,16 @@ spec:
         distro:
           title: Distro
           type: string
-          default: autosd
+          default: autosd9-sig
           enum:
-            - autosd
+            - autosd9
+            - autosd9-sig
+            - autosd9-latest-sig
             - cs9
+            - eln
+            - f40
+            - f41
+            - rhivos
         arch:
           title: Architecture
           type: string
@@ -70,6 +76,9 @@ spec:
           enum:
             - rpi4
             - qemu
+            - am69sk
+            - beagleplay
+            - aws
         mode:
           title: Package Mode
           type: string
@@ -85,6 +94,7 @@ spec:
             - image
             - qcow2
             - container
+            - tar
     - title: Provide Cluster Information
       required:
         - cluster_id
