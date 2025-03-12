@@ -51,11 +51,11 @@ spec:
     - name: package-image
       params:
         - name: IMAGE
-          value: "quay-k8qtz.apps.cluster-k8qtz.k8qtz.sandbox2954.opentlc.com/quayadmin/arm3/rhivos"
+          value: "quay-k8qtz./quayadmin/arm3/rhivos"
         - name: DOCKERFILE
           value: "./Containerfile"
         - name: CONTEXT
-          value: "./binary"
+          value: "./binaries"
       taskRef:
         kind: ClusterTask
         name: buildah

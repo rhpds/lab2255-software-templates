@@ -85,7 +85,7 @@ data:
         - name: download the image
           fetch:
             src: "{{ "{{" }} image_file_path {{ "}}" }}"
-            dest: "/workspace/source/binary/{{ "{{" }} aib_distro {{ "}}" }}_{{ "{{" }} aib_target {{ "}}" }}_{{ "{{" }} manifest_ref {{ "}}" }}.{{ "{{" }} aib_arch {{ "}}" }}.{{ "{{" }} aib_export_format {{ "}}" }}"
+            dest: "/workspace/source/binaries/{{ "{{" }} aib_distro {{ "}}" }}_{{ "{{" }} aib_target {{ "}}" }}_{{ "{{" }} manifest_ref {{ "}}" }}.{{ "{{" }} aib_arch {{ "}}" }}.{{ "{{" }} aib_export_format {{ "}}" }}"
             flat: yes 
             validate_checksum: yes
           timeout: 600
