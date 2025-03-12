@@ -4,12 +4,58 @@ metadata:
   name: aib-builder-task
 spec:
   params:
-    - name: revision
-      description: 'Revision to checkout. (branch, tag, sha, ref, etc...)'
+    - name: job_id
+      description: 'The reference used to track the job and access its assets'
       type: string
       default: ''
-    - name: secret-config-ref
-      description: Bla bla
+    - name: manifest-ref
+      description: 'The manifest to use for the build'
+      type: string
+      default: 'basic'
+    - name: manifest-ext
+      description: 'The type manifest: mpp.yml or aib.yaml'
+      type: string
+      default: 'mpp.yml'
+    - name: manifest-location
+      description: 'The path to the manifest definition'
+      type: string
+      default: 'manifests'
+    
+    - name: aib-distro
+      description: 'autosd9 cs9'
+      type: string
+      default: 'autosd9-sig'  
+    - name: aib-arch
+      description: 'aarch64 x86_64'
+      type: string
+      default: 'aarch64'
+    - name: aib-target
+      description: 'rpi4 qemu ...'
+      type: string
+      default: 'qemu'
+    - name: aib-mode
+      description: 'package image ...'
+      type: string
+      default: 'image'
+    - name: aib-export-format
+      description: 'image qcow2 container'
+      type: string
+      default: 'qcow2'
+    - name: aib-working-dir
+      description: 'aib-working-dir'
+      type: string
+      default: '/home/workspace/builder'
+    - name: aib-container-image
+      description: 'aib container'
+      type: string
+      default: 'quay.io/centos-sig-automotive/automotive-osbuild:latest'
+  
+    - name: aib-playbook
+      description: 'aib playbook to run'
+      type: string
+      default: 'builder.yaml'
+    - name: aib-secret-config-ref
+      description: 'Secret with the user, password, and host used to access the AIB'
       type: string
       default: 'aib-config'
   steps:
@@ -20,27 +66,41 @@ spec:
           valueFrom:
             secretKeyRef:
               key: user
-              name: $(params.secret-config-ref)
+              name: $(params.aib-secret-config-ref)
         - name: AIB_PASSWORD
           valueFrom:
             secretKeyRef:
               key: password
-              name: $(params.secret-config-ref)
+              name: $(params.aib-secret-config-ref)
         - name: AIB_HOST
           valueFrom:
             secretKeyRef:
               key: host
-              name: $(params.secret-config-ref)
+              name: $(params.aib-secret-config-ref)
       script: |
         #!/usr/bin/env bash
 
         set -x
 
+        # aib stuff
+        export JOB_ID="$(params.job_id)"
+        export MANIFEST_REF="$(params.manifest-ref)"
+        export MANIFEST_EXT="$(params.manifest-ext)"
+        export MANIFEST_LOCATION="$(params.manifest-location)"
+
+        export AIB_DISTRO="$(params.aib-distro)"
+        export AIB_ARCH="$(params.aib-arch)"
+        export AIB_TARGET="$(params.aib-target)"
+        export AIB_MODE="$(params.aib-mode)"
+        export AIB_EXPORT_FORMAT="$(params.aib-export-format)"
+        export AIB_WORKING_DIR="$(params.aib-working-dir)"
+        export AIB_CONTAINER_IMAGE="$(params.aib-container-image)"
+
+        # ansible stuff
         export ANSIBLE_HOST_KEY_CHECKING=False
 
-        export REVISION="$(params.revision)"
-
-        ansible-playbook /scripts/builder.yaml -i $AIB_HOST, -e "ansible_user=$AIB_USER" -e "ansible_password=$AIB_PASSWORD" 
+        # run the playbook
+        ansible-playbook /scripts/$(params.aib-playbook) -i $AIB_HOST, -e "ansible_user=$AIB_USER" -e "ansible_password=$AIB_PASSWORD" 
 
       volumeMounts: 
         - name: scripts-volume

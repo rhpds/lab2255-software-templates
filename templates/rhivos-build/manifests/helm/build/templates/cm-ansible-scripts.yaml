@@ -8,13 +8,47 @@ data:
       hosts: all
       gather_facts: no
       tasks:
-        - name: save the REVISION as JOB_ID
+        - name: save all the facts
           set_fact:
-            job_id: "{{ "{{" }} lookup('env', 'REVISION') {{ "}}" }}"
+            job_id: "{{ "{{" }} lookup('env', 'JOB_ID') {{ "}}" }}"
+
+            manifest_ref: "{{ "{{" }} lookup('env', 'MANIFEST_REF') {{ "}}" }}"
+            manifest_ext: "{{ "{{" }} lookup('env', 'MANIFEST_EXT') {{ "}}" }}"
+            manifest_location: "{{ "{{" }} lookup('env', 'MANIFEST_LOCATION') {{ "}}" }}"
+
+            aib_distro: "{{ "{{" }} lookup('env', 'AIB_DISTRO') {{ "}}" }}"
+            aib_arch: "{{ "{{" }} lookup('env', 'AIB_ARCH') {{ "}}" }}"
+            aib_target: "{{ "{{" }} lookup('env', 'AIB_TARGET') {{ "}}" }}"
+            aib_mode: "{{ "{{" }} lookup('env', 'AIB_MODE') {{ "}}" }}"
+            aib_export_format: "{{ "{{" }} lookup('env', 'AIB_EXPORT_FORMAT') {{ "}}" }}"
+            aib_working_dir: "{{ "{{" }} lookup('env', 'AIB_WORKING_DIR') {{ "}}" }}"
+            aib_container_image: "{{ "{{" }} lookup('env', 'AIB_CONTAINER_IMAGE') {{ "}}" }}"
+        
+        - name: create some facts
+          set_fact:
+            build_location: "{{ "{{" }} aib_working_dir {{ "}}" }}/{{ "{{" }} job_id {{ "}}" }}"
+            manifest_file: "{{ "{{" }} manifest_ref {{ "}}" }}.{{ "{{" }} manifest_ext {{ "}}" }}"
+        
+        - name: create the working directory
+          become: true
+          ansible.builtin.file:
+            path: "{{ "{{" }} build_location {{ "}}" }}"
+            state: directory
+
+        - name: transfer the manifest
+          become: true
+          ansible.builtin.copy:
+            src: "/workspace/source/{{ "{{" }} manifest_location {{ "}}" }}/{{ "{{" }} manifest_file {{ "}}" }}"
+            dest: "{{ "{{" }} build_location {{ "}}" }}/{{ "{{" }} manifest_file {{ "}}" }}"
+            mode: "0644"
 
         - name: build the OS image
           become: true
           shell: |
-            echo 'HELLO {{ "{{" }} job_id {{ "}}" }}' > {{ "{{" }} job_id {{ "}}" }}.txt
+            set -x
+            pwd
+            ls -la
+            ls -la {{ "{{" }} build_location {{ "}}" }}
+
           args:
-            chdir: "/home/workspace"
+            chdir: "{{ "{{" }} aib_working_dir {{ "}}" }}"
