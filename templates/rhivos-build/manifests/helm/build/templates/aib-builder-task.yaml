@@ -36,13 +36,11 @@ spec:
 
         set -x
 
-        echo "> $AIB_PASSWORD <"
-
         export ANSIBLE_HOST_KEY_CHECKING=False
 
         export REVISION="$(params.revision)"
 
-        ansible-playbook -i /scripts/inventory.yaml /scripts/builder.yaml
+        ansible-playbook /scripts/builder.yaml -i $AIB_HOST, -e "ansible_user=$AIB_USER" -e "ansible_password=$AIB_PASSWORD" 
 
       volumeMounts: 
         - name: scripts-volume
@@ -54,7 +52,5 @@ spec:
         items:
           - key: builder.yaml
             path: builder.yaml
-          #- key: inventory.yaml
-          #  path: inventory.yaml
   workspaces:
     - name: source

@@ -3,16 +3,9 @@ metadata:
   name:  {{ .Values.app.name }}-ansible-scripts
 apiVersion: v1
 data:
-  inventory.yaml: |
-    automotive-image-builder:
-      hosts:
-        {{ .Values.builder.host }}:
-          # ansible configuration
-          ansible_user: {{ .Values.builder.user }}
-          ansible_password: "{{ .Values.builder.password }}"
   builder.yaml: |
     - name: builder
-      hosts: automotive-image-builder
+      hosts: all
       gather_facts: no
       tasks:
         - name: save the REVISION as JOB_ID
