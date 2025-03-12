@@ -1,9 +1,8 @@
 version: '2'
 mpp-vars:
   name: ${{values.artifact_id}}
-  ssh_permit_password_auth: {{ mpp_vars.ssh_permit_password_auth }}
-  ssh_permit_root_login: {{ mpp_vars.ssh_permit_root_login }}
-  root_ssh_key: {{ ssh_public_key }}
+  ssh_permit_password_auth: true
+  ssh_permit_root_login: true
 pipelines:
 - name: rootfs
   build: name:build
@@ -44,10 +43,7 @@ pipelines:
               - hostname
               - openssh-clients
               - openssh-server
-              - qemu-kvm
               - podman
-              - buildah
-              - skopeo
           excludes:
           - dracut-config-rescue
   - type: org.osbuild.groups

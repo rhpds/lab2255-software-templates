@@ -24,11 +24,17 @@ data:
             aib_working_dir: "{{ "{{" }} lookup('env', 'AIB_WORKING_DIR') {{ "}}" }}"
             aib_container_image: "{{ "{{" }} lookup('env', 'AIB_CONTAINER_IMAGE') {{ "}}" }}"
         
-        - name: create some facts
+        - name: create some facts 1
           set_fact:
-            build_location: "{{ "{{" }} aib_working_dir {{ "}}" }}/{{ "{{" }} job_id {{ "}}" }}"
-            manifest_file: "{{ "{{" }} manifest_ref {{ "}}" }}.{{ "{{" }} manifest_ext {{ "}}" }}"
+            build_location: "{{ "{{" }} aib_working_dir {{ "}}" }}/builds/{{ "{{" }} job_id {{ "}}" }}"
+            cannonical_build_name: "{{ "{{" }} job_id {{ "}}" }}_{{ "{{" }} aib_distro {{ "}}" }}_{{ "{{" }} aib_target {{ "}}" }}_{{ "{{" }} manifest_ref {{ "}}" }}.{{ "{{" }} aib_arch {{ "}}" }}"
         
+        - name: create some facts 2
+          set_fact:
+            manifest_file: "{{ "{{" }} manifest_ref {{ "}}" }}.{{ "{{" }} manifest_ext {{ "}}" }}"
+            manifest_file_path: "{{ "{{" }} build_location {{ "}}" }}/{{ "{{" }} manifest_ref {{ "}}" }}.{{ "{{" }} manifest_ext {{ "}}" }}"
+            image_file_path: "{{ "{{" }} aib_working_dir {{ "}}" }}/builds/{{ "{{" }} cannonical_build_name {{ "}}" }}.{{ "{{" }} aib_export_format {{ "}}" }}"
+
         - name: create the working directory
           become: true
           ansible.builtin.file:
@@ -39,16 +45,49 @@ data:
           become: true
           ansible.builtin.copy:
             src: "/workspace/source/{{ "{{" }} manifest_location {{ "}}" }}/{{ "{{" }} manifest_file {{ "}}" }}"
-            dest: "{{ "{{" }} build_location {{ "}}" }}/{{ "{{" }} manifest_file {{ "}}" }}"
+            dest: "{{ "{{" }} manifest_file_path {{ "}}" }}"
             mode: "0644"
 
-        - name: build the OS image
+        - name: check if the image already exists
           become: true
+          stat:
+            path: "{{ "{{" }} image_file_path {{ "}}" }}"
+          register: image_stat
+        
+        - name: build the image in background
+          become: true
+          async: 900
+          poll: 10
           shell: |
             set -x
-            pwd
-            ls -la
-            ls -la {{ "{{" }} build_location {{ "}}" }}
+            
+            OSBUILD_CMD="automotive-image-builder/automotive-image-builder build \
+              --distro "{{ "{{" }} aib_distro {{ "}}" }}" --arch "{{ "{{" }} aib_arch {{ "}}" }}" \
+              --target "{{ "{{" }} aib_target {{ "}}" }}" --mode "{{ "{{" }} aib_mode {{ "}}" }}" \
+              --export "{{ "{{" }} aib_export_format {{ "}}" }}" \
+              --build-dir="{{ "{{" }} build_location {{ "}}" }}" \
+              --cache=".mpp-cache" --cache-max-size="10GB" \
+              --osbuild-manifest="{{ "{{" }} build_location {{ "}}" }}/output.json" \
+              "{{ "{{" }} manifest_file_path {{ "}}" }}" "output.{{ "{{" }} aib_export_format {{ "}}" }}" > {{ "{{" }} build_location {{ "}}" }}/aib.log"
+
+            # build the image using podman
+            podman run --rm --privileged --pull=newer --security-opt label=type:unconfined_t \
+              -v /dev:/dev -v "$PWD":"$PWD" \
+              {{ "{{" }} aib_container_image {{ "}}" }} \
+              /bin/bash -c "cd $PWD/; $OSBUILD_CMD" \
+              && mv "output.{{ "{{" }} aib_export_format {{ "}}" }}" "builds/{{ "{{" }} cannonical_build_name {{ "}}" }}.{{ "{{" }} aib_export_format {{ "}}" }}"
 
           args:
             chdir: "{{ "{{" }} aib_working_dir {{ "}}" }}"
+          when:
+            image_stat.stat.exists == false
+
+        - name: download the image
+          fetch:
+            src: "{{ "{{" }} image_file_path {{ "}}" }}"
+            dest: "/workspace/source/binary/{{ "{{" }} aib_distro {{ "}}" }}_{{ "{{" }} aib_target {{ "}}" }}_{{ "{{" }} manifest_ref {{ "}}" }}.{{ "{{" }} aib_arch {{ "}}" }}.{{ "{{" }} aib_export_format {{ "}}" }}"
+            flat: yes 
+            validate_checksum: yes
+          timeout: 600
+
+        

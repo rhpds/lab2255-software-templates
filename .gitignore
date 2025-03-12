@@ -1,3 +1,4 @@
+**/binary/**
 inventory/**
 ansible/inventory/**
 venv/**
