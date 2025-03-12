@@ -20,9 +20,6 @@ metadata:
     - url: https://devspaces${{values.cluster}}/#https://${{values.repo_url}}/${{values.repo_destination}}
       title: OpenShift DevSpaces (VS Code)
       icon: web
-    #- url: https://devspaces${{values.cluster}}/#https://${{values.repo_url}}/${{values.repo_destination}}?che-editor=che-incubator/che-idea/latest
-    #  title: OpenShift Dev Spaces (JetBrains IntelliJ)
-    #  icon: web
 spec:
   type: service
   lifecycle: production

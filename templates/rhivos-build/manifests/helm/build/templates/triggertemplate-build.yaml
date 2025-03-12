@@ -41,7 +41,12 @@ spec:
                 resources:
                   requests:
                     storage: 1Gi
+{{- if eq .Values.image.registry "Quay" }}
           - name: docker-config
             secret:
               secretName: {{ .Values.app.name }}-registry-creds
+{{- else }}
+          - name: docker-config
+            emptyDir: {}
+{{- end }}
 

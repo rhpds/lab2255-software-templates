@@ -47,6 +47,24 @@ spec:
       workspaces:
         - name: source
           workspace: source-folder
+
+    - name: package-image
+      params:
+        - name: IMAGE
+          value: "quay-k8qtz.apps.cluster-k8qtz.k8qtz.sandbox2954.opentlc.com/quayadmin/arm3/rhivos"
+        - name: DOCKERFILE
+          value: "./Containerfile"
+        - name: CONTEXT
+          value: "./binary"
+      taskRef:
+        kind: ClusterTask
+        name: buildah
+      runAfter:
+        - aib-builder
+      workspaces:
+        - name: source
+          workspace: source-folder
+
   workspaces:
     - name: source-folder
     - name: docker-config
