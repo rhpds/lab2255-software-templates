@@ -42,7 +42,7 @@ spec:
         - name: job_id
           value: $(params.source-branch)
         - name: component_id
-          value: $(params.component_id)
+          value: $(params.component-id)
       taskRef:
         kind: Task
         name: aib-builder-task

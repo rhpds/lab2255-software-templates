@@ -1,0 +1,16 @@
+name: aaa1
+manifest: manifests/basic.mpp.yaml
+
+build:
+  spec:
+    distro: autosd9-sig  # autosd cs9
+    arch: aarch64 # aarch64 x86_64
+    target: rpi4 # rpi4 qemu
+    mode: package # package image
+    export_format: image # image qcow2 container
+
+test:
+  spec:
+    target: qemu
+    mode: image
+    export_format: qcow2
