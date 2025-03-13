@@ -8,6 +8,10 @@ spec:
       description: 'The reference used to track the job and access its assets'
       type: string
       default: ''
+    - name: component_id
+      description: 'The conponent_id the job belongs to'
+      type: string
+      default: ''
     - name: manifest-ref
       description: 'The manifest to use for the build'
       type: string
@@ -50,11 +54,11 @@ spec:
       type: string
       default: 'quay.io/centos-sig-automotive/automotive-osbuild:latest'
   
-    - name: aib-playbook
+    - name: playbook
       description: 'aib playbook to run'
       type: string
       default: 'builder.yaml'
-    - name: aib-secret-config-ref
+    - name: secret-config-ref
       description: 'Secret with the user, password, and host used to access the AIB'
       type: string
       default: 'aib-config'
@@ -66,17 +70,17 @@ spec:
           valueFrom:
             secretKeyRef:
               key: user
-              name: $(params.aib-secret-config-ref)
+              name: $(params.secret-config-ref)
         - name: AIB_PASSWORD
           valueFrom:
             secretKeyRef:
               key: password
-              name: $(params.aib-secret-config-ref)
+              name: $(params.secret-config-ref)
         - name: AIB_HOST
           valueFrom:
             secretKeyRef:
               key: host
-              name: $(params.aib-secret-config-ref)
+              name: $(params.secret-config-ref)
       script: |
         #!/usr/bin/env bash
 
@@ -84,6 +88,7 @@ spec:
 
         # aib stuff
         export JOB_ID="$(params.job_id)"
+        export COMPONENT_ID="$(params.component_id)"
         export MANIFEST_REF="$(params.manifest-ref)"
         export MANIFEST_EXT="$(params.manifest-ext)"
         export MANIFEST_LOCATION="$(params.manifest-location)"
@@ -100,7 +105,7 @@ spec:
         export ANSIBLE_HOST_KEY_CHECKING=False
 
         # run the playbook
-        ansible-playbook /scripts/$(params.aib-playbook) -i $AIB_HOST, -e "ansible_user=$AIB_USER" -e "ansible_password=$AIB_PASSWORD" 
+        ansible-playbook /scripts/$(params.playbook) -i $AIB_HOST, -e "ansible_user=$AIB_USER" -e "ansible_password=$AIB_PASSWORD" 
 
       volumeMounts: 
         - name: scripts-volume

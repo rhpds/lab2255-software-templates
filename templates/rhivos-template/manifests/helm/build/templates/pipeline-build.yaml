@@ -41,6 +41,8 @@ spec:
       params:
         - name: job_id
           value: $(params.source-branch)
+        - name: component_id
+          value: $(params.component_id)
       taskRef:
         kind: Task
         name: aib-builder-task
@@ -54,11 +56,13 @@ spec:
       params:
         - name: IMAGE
           value: $(params.output-image)
+        - name: DOCKERFILE
+          value: ./binaries/Containerfile
       runAfter:
         - aib-builder
       taskRef:
-        kind: Task
-        name: kaniko
+        kind: ClusterTask
+        name: buildah
       workspaces:
         - name: source
           workspace: source-folder

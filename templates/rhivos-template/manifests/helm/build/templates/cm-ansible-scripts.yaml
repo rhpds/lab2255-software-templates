@@ -11,6 +11,7 @@ data:
         - name: save all the facts
           set_fact:
             job_id: "{{ "{{" }} lookup('env', 'JOB_ID') {{ "}}" }}"
+            component_id: "{{ "{{" }} lookup('env', 'COMPONENT_ID') {{ "}}" }}"
 
             manifest_ref: "{{ "{{" }} lookup('env', 'MANIFEST_REF') {{ "}}" }}"
             manifest_ext: "{{ "{{" }} lookup('env', 'MANIFEST_EXT') {{ "}}" }}"
@@ -26,7 +27,7 @@ data:
         
         - name: create some facts 1
           set_fact:
-            build_location: "{{ "{{" }} aib_working_dir {{ "}}" }}/builds/{{ "{{" }} job_id {{ "}}" }}"
+            build_location: "{{ "{{" }} aib_working_dir {{ "}}" }}/builds/{{ "{{" }} component_id {{ "}}" }}/{{ "{{" }} job_id {{ "}}" }}"
             cannonical_build_name: "{{ "{{" }} job_id {{ "}}" }}_{{ "{{" }} aib_distro {{ "}}" }}_{{ "{{" }} aib_target {{ "}}" }}_{{ "{{" }} manifest_ref {{ "}}" }}.{{ "{{" }} aib_arch {{ "}}" }}"
         
         - name: create some facts 2
@@ -56,7 +57,7 @@ data:
         
         - name: build the image in background
           become: true
-          async: 900
+          async: 1200
           poll: 10
           shell: |
             set -x
@@ -85,7 +86,7 @@ data:
         - name: download the image
           fetch:
             src: "{{ "{{" }} image_file_path {{ "}}" }}"
-            dest: "/workspace/source/binaries/{{ "{{" }} aib_distro {{ "}}" }}_{{ "{{" }} aib_target {{ "}}" }}_{{ "{{" }} manifest_ref {{ "}}" }}.{{ "{{" }} aib_arch {{ "}}" }}.{{ "{{" }} aib_export_format {{ "}}" }}"
+            dest: "/workspace/source/binaries/img/{{ "{{" }} aib_distro {{ "}}" }}_{{ "{{" }} aib_target {{ "}}" }}_{{ "{{" }} manifest_ref {{ "}}" }}.{{ "{{" }} aib_arch {{ "}}" }}.{{ "{{" }} aib_export_format {{ "}}" }}"
             flat: yes 
             validate_checksum: yes
           timeout: 600

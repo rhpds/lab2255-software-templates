@@ -1,5 +1,6 @@
-FROM busybox:latest
+FROM registry.access.redhat.com/ubi9/ubi-minimal:9.5
 
 VOLUME ["/binaries"]
 
 COPY .gitlab-ci.yml /binaries/.gitlab-ci
+COPY binaries/img/ /binaries/img/
