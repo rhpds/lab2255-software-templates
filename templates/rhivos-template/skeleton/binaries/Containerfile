@@ -1,3 +1,5 @@
-FROM scratch
+FROM busybox:latest
 
-ADD . .
+VOLUME ["/binaries"]
+
+COPY .gitlab-ci.yml /binaries/.gitlab-ci

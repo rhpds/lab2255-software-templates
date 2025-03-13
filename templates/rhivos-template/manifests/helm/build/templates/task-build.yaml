@@ -20,10 +20,10 @@ spec:
       description: Name (reference) of the image to build.
     - name: DOCKERFILE
       description: Path to the Dockerfile to build.
-      default: ./Containerfile
+      default: ./binaries/Containerfile
     - name: CONTEXT
       description: The build context used by Kaniko.
-      default: ./binaries
+      default: ./
     - name: EXTRA_ARGS
       type: array
       default: []

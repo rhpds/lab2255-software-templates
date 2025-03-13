@@ -37,12 +37,25 @@ spec:
         - name: output
           workspace: source-folder
     
-    - name: build-and-push
+    - name: aib-builder
+      params:
+        - name: job_id
+          value: $(params.source-branch)
+      taskRef:
+        kind: Task
+        name: aib-builder-task
+      runAfter:
+        - git-clone
+      workspaces:
+        - name: source
+          workspace: source-folder
+
+    - name: wrap-and-push
       params:
         - name: IMAGE
           value: $(params.output-image)
       runAfter:
-        - git-clone
+        - aib-builder
       taskRef:
         kind: Task
         name: kaniko

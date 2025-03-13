@@ -138,6 +138,8 @@ spec:
       action: publish:gitlab
       input:
         repoUrl: "${{ parameters.repo.host }}?owner=${{ parameters.repo.owner }}&repo=${{parameters.component_id}}"
+        title: code resources for ${{ parameters.component_id }}
+        defaultBranch: main
         repoVisibility: public
 
     - id: register
@@ -181,6 +183,7 @@ spec:
         title: gitops resources for ${{ parameters.component_id }}
         description: gitops resources for ${{ parameters.component_id }}
         sourcePath: ./tenant-gitops
+        defaultBranch: main
         repoVisibility: public
 
     - id: create-argocd-resources
