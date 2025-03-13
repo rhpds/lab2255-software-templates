@@ -2,8 +2,8 @@ apiVersion: scaffolder.backstage.io/v1beta3
 kind: Template
 metadata:
   name: rhivos-build-template
-  title: Simple RHIVOS Build
-  description: Build the Red Hat In-Vehicle OS
+  title: Simple RHIVOS Build (DEPRECATED)
+  description: Build the Red Hat In-Vehicle OS (DEPRECATED)
   tags:
     - automotive
     - rhivos
