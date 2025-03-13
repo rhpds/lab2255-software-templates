@@ -7,3 +7,4 @@ spec:
   type: url
   targets:
     - templates/rhivos-build/template.yaml
+    - templates/quarkus-web-template/template.yaml
