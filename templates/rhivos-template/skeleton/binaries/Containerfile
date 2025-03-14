@@ -1,6 +1,12 @@
 FROM registry.access.redhat.com/ubi9/ubi-minimal:9.5
 
-VOLUME ["/binaries"]
+LABEL name="${{values.component_id}}"
+LABEL maintainer="${{values.owner}}"
+LABEL description="${{values.description}}"
 
-COPY .gitlab-ci.yml /binaries/.gitlab-ci
-COPY binaries/img/ /binaries/img/
+RUN mkdir -p /binaries
+
+COPY .abi-ci.yml /binaries/.abi-ci.yml
+#COPY binaries/img/ /binaries/img/
+
+VOLUME ["/binaries"]

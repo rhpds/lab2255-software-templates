@@ -58,6 +58,8 @@ spec:
           value: $(params.output-image)
         - name: DOCKERFILE
           value: ./binaries/Containerfile
+        - name: SKIP_PUSH # for testing purposes !
+          value: 'true'
       runAfter:
         - aib-builder
       taskRef:

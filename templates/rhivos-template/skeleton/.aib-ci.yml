@@ -1,5 +1,5 @@
-name: aaa1
-manifest: manifests/basic.mpp.yaml
+name: ${{values.component_id}}
+manifest: manifests/basic.mpp.yml
 
 build:
   spec:
