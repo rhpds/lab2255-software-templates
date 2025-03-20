@@ -17,35 +17,6 @@ spec:
       description: 'The S3 bucket name'
       type: string
       default: 'rhadp-aib-cdn'
-    - name: manifest-ref
-      description: 'The manifest to use for the build'
-      type: string
-      default: 'basic'
-    - name: manifest-ext
-      description: 'The type manifest: mpp.yml or aib.yaml'
-      type: string
-      default: 'mpp.yml'
-    - name: manifest-location
-      description: 'The path to the manifest definition'
-      type: string
-      default: 'manifests'
-    # everythinge after this should go away ...
-    - name: aib-distro
-      description: 'autosd9 cs9'
-      type: string
-      default: 'autosd9-sig'  
-    - name: aib-arch
-      description: 'aarch64 x86_64'
-      type: string
-      default: 'aarch64'
-    - name: aib-target
-      description: 'rpi4 qemu ...'
-      type: string
-      default: 'qemu'
-    - name: aib-export-format
-      description: 'image qcow2 container'
-      type: string
-      default: 'qcow2'
     # secrets
     - name: aws-config-ref
       description: 'Secret with the keys used to access the AWS infrastructure'
@@ -79,8 +50,6 @@ spec:
         export JOB_ID="$(params.job_id)"
         export COMPONENT_ID="$(params.component_id)"
         export BUCKET_NAME="$(params.bucket_name)"
-        export IMAGE_NAME="$(params.aib-distro)_$(params.aib-target)_$(params.manifest-ref).$(params.aib-arch).$(params.aib-export-format)"
-        export IMAGE_PATH="/workspace/source/binaries/img"
         
         # run the playbook
         ansible-playbook /scripts/s3-upload.yaml -e "AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID" -e "AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY" -e "AWS_DEFAULT_REGION=$AWS_DEFAULT_REGION" 

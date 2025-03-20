@@ -13,39 +13,6 @@ spec:
       description: 'The conponent_id the job belongs to'
       type: string
       default: ''
-    - name: manifest-ref
-      description: 'The manifest to use for the build'
-      type: string
-      default: 'basic'
-    - name: manifest-ext
-      description: 'The type manifest: mpp.yml or aib.yaml'
-      type: string
-      default: 'mpp.yml'
-    - name: manifest-location
-      description: 'The path to the manifest definition'
-      type: string
-      default: 'manifests'
-    # build parameters
-    - name: aib-distro
-      description: 'autosd9 cs9'
-      type: string
-      default: 'autosd9-sig'  
-    - name: aib-arch
-      description: 'aarch64 x86_64'
-      type: string
-      default: 'aarch64'
-    - name: aib-target
-      description: 'rpi4 qemu ...'
-      type: string
-      default: 'qemu'
-    - name: aib-mode
-      description: 'package image ...'
-      type: string
-      default: 'image'
-    - name: aib-export-format
-      description: 'image qcow2 container'
-      type: string
-      default: 'qcow2'
     - name: aib-working-dir
       description: 'aib-working-dir'
       type: string
@@ -87,15 +54,7 @@ spec:
         # aib stuff
         export JOB_ID="$(params.job_id)"
         export COMPONENT_ID="$(params.component_id)"
-        export MANIFEST_REF="$(params.manifest-ref)"
-        export MANIFEST_EXT="$(params.manifest-ext)"
-        export MANIFEST_LOCATION="$(params.manifest-location)"
-
-        export AIB_DISTRO="$(params.aib-distro)"
-        export AIB_ARCH="$(params.aib-arch)"
-        export AIB_TARGET="$(params.aib-target)"
-        export AIB_MODE="$(params.aib-mode)"
-        export AIB_EXPORT_FORMAT="$(params.aib-export-format)"
+        
         export AIB_WORKING_DIR="$(params.aib-working-dir)"
         export AIB_CONTAINER_IMAGE="$(params.aib-container-image)"
 
