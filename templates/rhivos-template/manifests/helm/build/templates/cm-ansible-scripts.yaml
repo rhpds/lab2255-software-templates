@@ -77,7 +77,7 @@ data:
             path: "{{ "{{" }} image_file_path {{ "}}" }}"
           register: image_stat
         
-        - name: build the image in background
+        - name: build the image in the background
           become: true
           async: 1200
           poll: 10
