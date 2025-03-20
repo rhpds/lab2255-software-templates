@@ -1,7 +1,7 @@
 kind: Task
 apiVersion: tekton.dev/v1beta1
 metadata:
-  name: aib-builder-task
+  name: s3-upload-task
 spec:
   params:
     # job parameters
@@ -13,6 +13,10 @@ spec:
       description: 'The conponent_id the job belongs to'
       type: string
       default: ''
+    - name: bucket_name
+      description: 'The S3 bucket name'
+      type: string
+      default: 'rhadp-aib-cdn'
     - name: manifest-ref
       description: 'The manifest to use for the build'
       type: string
@@ -25,7 +29,7 @@ spec:
       description: 'The path to the manifest definition'
       type: string
       default: 'manifests'
-    # build parameters
+    # everythinge after this should go away ...
     - name: aib-distro
       description: 'autosd9 cs9'
       type: string
@@ -38,47 +42,34 @@ spec:
       description: 'rpi4 qemu ...'
       type: string
       default: 'qemu'
-    - name: aib-mode
-      description: 'package image ...'
-      type: string
-      default: 'image'
     - name: aib-export-format
       description: 'image qcow2 container'
       type: string
       default: 'qcow2'
-    - name: aib-working-dir
-      description: 'aib-working-dir'
-      type: string
-      default: '/home/workspace/builder'
-    - name: aib-container-image
-      description: 'aib container'
-      type: string
-      default: 'quay.io/centos-sig-automotive/automotive-osbuild:latest'
     # secrets
-    - name: secret-config-ref
-      description: 'Secret with the user, password, and host used to access the AIB'
+    - name: aws-config-ref
+      description: 'Secret with the keys used to access the AWS infrastructure'
       type: string
-      default: 'aib-config'
-
+      default: 'aws-credentials'
   steps:
-    - name: aib-build
+    - name: s3-upload
       image: quay.io/agnosticd/ee-multicloud:latest
       env:
-        - name: AIB_USER
+        - name: AWS_ACCESS_KEY_ID
           valueFrom:
             secretKeyRef:
-              key: user
-              name: $(params.secret-config-ref)
-        - name: AIB_PASSWORD
+              key: aws_accesskey
+              name: $(params.aws-config-ref)
+        - name: AWS_SECRET_ACCESS_KEY
           valueFrom:
             secretKeyRef:
-              key: password
-              name: $(params.secret-config-ref)
-        - name: AIB_HOST
+              key: aws_secretkey
+              name: $(params.aws-config-ref)
+        - name: AWS_DEFAULT_REGION
           valueFrom:
             secretKeyRef:
-              key: host
-              name: $(params.secret-config-ref)
+              key: aws_region
+              name: $(params.aws-config-ref)
       script: |
         #!/usr/bin/env bash
 
@@ -87,23 +78,12 @@ spec:
         # aib stuff
         export JOB_ID="$(params.job_id)"
         export COMPONENT_ID="$(params.component_id)"
-        export MANIFEST_REF="$(params.manifest-ref)"
-        export MANIFEST_EXT="$(params.manifest-ext)"
-        export MANIFEST_LOCATION="$(params.manifest-location)"
-
-        export AIB_DISTRO="$(params.aib-distro)"
-        export AIB_ARCH="$(params.aib-arch)"
-        export AIB_TARGET="$(params.aib-target)"
-        export AIB_MODE="$(params.aib-mode)"
-        export AIB_EXPORT_FORMAT="$(params.aib-export-format)"
-        export AIB_WORKING_DIR="$(params.aib-working-dir)"
-        export AIB_CONTAINER_IMAGE="$(params.aib-container-image)"
-
-        # ansible stuff
-        export ANSIBLE_HOST_KEY_CHECKING=False
-
+        export BUCKET_NAME="$(params.bucket_name)"
+        export IMAGE_NAME="$(params.aib-distro)_$(params.aib-target)_$(params.manifest-ref).$(params.aib-arch).$(params.aib-export-format)"
+        export IMAGE_PATH="/workspace/source/binaries/img/$IMAGE_NAME"
+        
         # run the playbook
-        ansible-playbook /scripts/builder.yaml -i $AIB_HOST, -e "ansible_user=$AIB_USER" -e "ansible_password=$AIB_PASSWORD" 
+        ansible-playbook /scripts/s3-upload.yaml -i localhost, -e "AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID" -e "AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY" -e "AWS_DEFAULT_REGION=$AWS_DEFAULT_REGION" 
 
       volumeMounts: 
         - name: scripts-volume
@@ -113,7 +93,7 @@ spec:
       configMap:
         name: {{ .Values.app.name }}-ansible-scripts
         items:
-          - key: builder.yaml
-            path: builder.yaml
+          - key: s3-upload.yaml
+            path: s3-upload.yaml
   workspaces:
     - name: source

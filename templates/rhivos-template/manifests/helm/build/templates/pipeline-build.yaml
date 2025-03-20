@@ -52,24 +52,39 @@ spec:
         - name: source
           workspace: source-folder
 
-    - name: wrap-and-push
+    - name: s3-upload
       params:
-        - name: IMAGE
-          value: $(params.output-image)
-        - name: DOCKERFILE
-          value: ./binaries/Containerfile
-        - name: SKIP_PUSH # for testing purposes !
-          value: 'true'
+        - name: job_id
+          value: $(params.source-branch)
+        - name: component_id
+          value: $(params.component-id)
       runAfter:
         - aib-builder
       taskRef:
-        kind: ClusterTask
-        name: buildah
+        kind: Task
+        name: s3-upload-task
       workspaces:
         - name: source
           workspace: source-folder
-        - name: dockerconfig
-          workspace: docker-config
+
+    #- name: wrap-and-push
+    #  params:
+    #    - name: IMAGE
+    #      value: $(params.output-image)
+    #    - name: DOCKERFILE
+    #      value: ./binaries/Containerfile
+    #    - name: SKIP_PUSH # for testing purposes !
+    #      value: 'true'
+    #  runAfter:
+    #    - aib-builder
+    #  taskRef:
+    #    kind: ClusterTask
+    #    name: buildah
+    #  workspaces:
+    #    - name: source
+    #      workspace: source-folder
+    #    - name: dockerconfig
+    #      workspace: docker-config
 
   workspaces:
     - name: source-folder

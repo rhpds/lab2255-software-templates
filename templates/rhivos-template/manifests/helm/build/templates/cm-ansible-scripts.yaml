@@ -3,6 +3,28 @@ metadata:
   name:  {{ .Values.app.name }}-ansible-scripts
 apiVersion: v1
 data:
+  s3-upload.yaml: |
+    - name: s3-upload
+      hosts: localhost
+      gather_facts: no
+      tasks:
+        - name: save all the facts
+          set_fact:
+            job_id: "{{ "{{" }} lookup('env', 'JOB_ID') {{ "}}" }}"
+            component_id: "{{ "{{" }} lookup('env', 'COMPONENT_ID') {{ "}}" }}"
+
+            bucket_name: "{{ "{{" }} lookup('env', 'BUCKET_NAME') {{ "}}" }}"
+            image_name: "{{ "{{" }} lookup('env', 'IMAGE_NAME') {{ "}}" }}"
+            image_path: "{{ "{{" }} lookup('env', 'IMAGE_PATH') {{ "}}" }}"
+
+        - name: upload the image
+          amazon.aws.s3_object:
+            bucket: "{{ "{{" }} bucket_name {{ "}}" }}"
+            object: "{{ "{{" }} component_id {{ "}}" }}/{{ "{{" }} job_id {{ "}}" }}_{{ "{{" }} image_name {{ "}}" }}"
+            src: "{{ "{{" }} image_path {{ "}}" }}/{{ "{{" }} image_name {{ "}}" }}"
+            mode: put
+            overwrite: always
+
   builder.yaml: |
     - name: builder
       hosts: all
