@@ -38,11 +38,11 @@ spec:
             name: cel
       name: tag-trig-preprod
       template:
-        ref: {{ .Values.app.name }}-run-test
+        ref: {{ .Values.app.name }}-run-tag
     
     - bindings:
         - kind: TriggerBinding
-          ref: tag-release
+          ref: tb-release
       interceptors:
         - params:
             - name: filter

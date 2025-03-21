@@ -20,7 +20,7 @@ spec:
     - apiVersion: tekton.dev/v1beta1
       kind: PipelineRun
       metadata:
-        generateName: {{ .Values.app.name }}-run-release-
+        generateName: {{ .Values.app.name }}-release-
         labels:
           backstage.io/kubernetes-id: {{ .Values.app.name }}
       spec:
