@@ -64,7 +64,8 @@ spec:
         export ANSIBLE_HOST_KEY_CHECKING=False
 
         # run the playbook
-        ansible-playbook /scripts/builder.yaml -i $AIB_HOST, -e "ansible_user=$AIB_USER" -e "ansible_password=$AIB_PASSWORD" 
+        ansible-playbook /scripts/builder.yaml \
+          -i $AIB_HOST, -e "ansible_user=$AIB_USER" -e "ansible_password=$AIB_PASSWORD" 
 
       volumeMounts: 
         - name: scripts-volume

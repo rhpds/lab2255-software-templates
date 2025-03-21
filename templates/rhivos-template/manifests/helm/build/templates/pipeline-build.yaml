@@ -16,10 +16,10 @@ spec:
       description: source branch to build from
       default: {{ .Values.git.branch }}
       type: string
-    - name: output-image
-      description: reference of the image that will get created
-      default: {{ include "image.dev-url" . }}
-      type: string
+    #- name: output-image
+    #  description: reference of the image that will get created
+    #  default: {{ include "image.dev-url" . }}
+    #  type: string
     - description: Component id
       name: component-id
       type: string
@@ -59,7 +59,7 @@ spec:
         - name: component_id
           value: $(params.component-id)
       runAfter:
-        - aib-builder
+        - image-builder
       taskRef:
         kind: Task
         name: s3-upload-task

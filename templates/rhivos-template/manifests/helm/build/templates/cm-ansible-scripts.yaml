@@ -56,63 +56,65 @@ data:
           set_fact:
             aib: "{{ "{{" }} default {{ "}}" }}"
 
-        - name: create some facts 1
+        - name: create more facts 1
           set_fact:
             build_location: "{{ "{{" }} aib_working_dir {{ "}}" }}/builds/{{ "{{" }} job_id {{ "}}" }}"
             image_name: "{{ "{{" }} component_id {{ "}}" }}_{{ "{{" }} aib.name {{ "}}" }}.{{ "{{" }} aib.spec.export_format {{ "}}" }}"
         
-        - name: create some facts 2
+        - name: create more facts 2
           set_fact:
             manifest_file_path: "{{ "{{" }} build_location {{ "}}" }}/{{ "{{" }} aib.manifest {{ "}}" }}"
             image_file_path: "{{ "{{" }} aib_working_dir {{ "}}" }}/builds/{{ "{{" }} image_name {{ "}}" }}"
-
-        - name: create the working directory
-          become: true
-          ansible.builtin.file:
-            path: "{{ "{{" }} build_location {{ "}}" }}"
-            state: directory
-
-        - name: transfer the manifest
-          become: true
-          ansible.builtin.copy:
-            src: "/workspace/source/manifests/{{ "{{" }} aib.manifest {{ "}}" }}"
-            dest: "{{ "{{" }} manifest_file_path {{ "}}" }}"
-            mode: "0644"
 
         - name: check if the image already exists
           become: true
           stat:
             path: "{{ "{{" }} image_file_path {{ "}}" }}"
           register: image_stat
-        
-        - name: build the image in the background
-          become: true
-          async: 1200
-          poll: 10
-          shell: |
-            set -x
-            
-            OSBUILD_CMD="automotive-image-builder/automotive-image-builder build \
-              --distro "{{ "{{" }} aib.spec.distro {{ "}}" }}" --arch "{{ "{{" }} aib.spec.arch {{ "}}" }}" \
-              --target "{{ "{{" }} aib.spec.target {{ "}}" }}" --mode "{{ "{{" }} aib.spec.mode {{ "}}" }}" \
-              --export "{{ "{{" }} aib.spec.export_format {{ "}}" }}" \
-              --build-dir="{{ "{{" }} build_location {{ "}}" }}" \
-              --cache=".mpp-cache" --cache-max-size="10GB" \
-              --osbuild-manifest="{{ "{{" }} build_location {{ "}}" }}/output.json" \
-              "{{ "{{" }} manifest_file_path {{ "}}" }}" "output.{{ "{{" }} aib.spec.export_format {{ "}}" }}" > {{ "{{" }} build_location {{ "}}" }}/aib.log"
 
-            # build the image using podman
-            podman run --rm --privileged --pull=newer --security-opt label=type:unconfined_t \
-              -v /dev:/dev -v "$PWD":"$PWD" \
-              {{ "{{" }} aib_container_image {{ "}}" }} \
-              /bin/bash -c "cd $PWD/; $OSBUILD_CMD" \
-              && mv "output.{{ "{{" }} aib.spec.export_format {{ "}}" }}" "builds/{{ "{{" }} image_name {{ "}}" }}"
+        - name: build the image
+          when: image_stat.stat.exists == false
+          block:
 
-          args:
-            chdir: "{{ "{{" }} aib_working_dir {{ "}}" }}"
-          when:
-            image_stat.stat.exists == false
+            - name: create the working directory
+              become: true
+              ansible.builtin.file:
+                path: "{{ "{{" }} build_location {{ "}}" }}"
+                state: directory
 
+            - name: transfer the manifest
+              become: true
+              ansible.builtin.copy:
+                src: "/workspace/source/manifests/{{ "{{" }} aib.manifest {{ "}}" }}"
+                dest: "{{ "{{" }} manifest_file_path {{ "}}" }}"
+                mode: "0644"
+
+            - name: build the image 
+              become: true
+              async: 1200
+              poll: 10
+              shell: |
+                set -x
+                
+                OSBUILD_CMD="automotive-image-builder/automotive-image-builder build \
+                  --distro "{{ "{{" }} aib.spec.distro {{ "}}" }}" --arch "{{ "{{" }} aib.spec.arch {{ "}}" }}" \
+                  --target "{{ "{{" }} aib.spec.target {{ "}}" }}" --mode "{{ "{{" }} aib.spec.mode {{ "}}" }}" \
+                  --export "{{ "{{" }} aib.spec.export_format {{ "}}" }}" \
+                  --build-dir="{{ "{{" }} build_location {{ "}}" }}" \
+                  --cache=".mpp-cache" --cache-max-size="10GB" \
+                  --osbuild-manifest="{{ "{{" }} build_location {{ "}}" }}/output.json" \
+                  "{{ "{{" }} manifest_file_path {{ "}}" }}" "output.{{ "{{" }} aib.spec.export_format {{ "}}" }}" > {{ "{{" }} build_location {{ "}}" }}/aib.log"
+
+                # build the image using podman
+                podman run --rm --privileged --pull=newer --security-opt label=type:unconfined_t \
+                  -v /dev:/dev -v "$PWD":"$PWD" \
+                  {{ "{{" }} aib_container_image {{ "}}" }} \
+                  /bin/bash -c "cd $PWD/; $OSBUILD_CMD" \
+                  && mv "output.{{ "{{" }} aib.spec.export_format {{ "}}" }}" "builds/{{ "{{" }} image_name {{ "}}" }}"
+
+              args:
+                chdir: "{{ "{{" }} aib_working_dir {{ "}}" }}"
+              
         #- name: download the image
         #  fetch:
         #    src: "{{ "{{" }} image_file_path {{ "}}" }}"
