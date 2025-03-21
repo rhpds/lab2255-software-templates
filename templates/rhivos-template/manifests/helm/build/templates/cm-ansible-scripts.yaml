@@ -32,7 +32,7 @@ data:
           amazon.aws.s3_object:
             bucket: "{{ "{{" }} bucket_name {{ "}}" }}"
             object: "{{ "{{" }} component_id {{ "}}" }}/{{ "{{" }} job_id {{ "}}" }}_{{ "{{" }} image_name {{ "}}" }}"
-            src: "{{ "{{" }} image_location {{ "}}" }}/{{ "{{" }} image_name {{ "}}" }}"
+            src: "{{ "{{" }} image_location {{ "}}" }}/{{ "{{" }} job_id {{ "}}" }}_{{ "{{" }} image_name {{ "}}" }}"
             mode: put
             overwrite: always
 
@@ -64,7 +64,7 @@ data:
         - name: create more facts 2
           set_fact:
             manifest_file_path: "{{ "{{" }} build_location {{ "}}" }}/{{ "{{" }} aib.manifest {{ "}}" }}"
-            image_file_path: "{{ "{{" }} aib_working_dir {{ "}}" }}/builds/{{ "{{" }} image_name {{ "}}" }}"
+            image_file_path: "{{ "{{" }} aib_working_dir {{ "}}" }}/builds/{{ "{{" }} job_id {{ "}}" }}_{{ "{{" }} image_name {{ "}}" }}"
 
         - name: check if the image already exists
           become: true
@@ -110,17 +110,8 @@ data:
                   -v /dev:/dev -v "$PWD":"$PWD" \
                   {{ "{{" }} aib_container_image {{ "}}" }} \
                   /bin/bash -c "cd $PWD/; $OSBUILD_CMD" \
-                  && mv "output.{{ "{{" }} aib.spec.export_format {{ "}}" }}" "builds/{{ "{{" }} image_name {{ "}}" }}"
+                  && mv "output.{{ "{{" }} aib.spec.export_format {{ "}}" }}" "builds/{{ "{{" }} job_id {{ "}}" }}_{{ "{{" }} image_name {{ "}}" }}"
 
               args:
                 chdir: "{{ "{{" }} aib_working_dir {{ "}}" }}"
-              
-        #- name: download the image
-        #  fetch:
-        #    src: "{{ "{{" }} image_file_path {{ "}}" }}"
-        #    dest: "/workspace/source/binaries/img/{{ "{{" }} aib.spec.distro {{ "}}" }}_{{ "{{" }} aib.spec.target {{ "}}" }}_{{ "{{" }} component_id {{ "}}" }}.{{ "{{" }} aib.spec.arch {{ "}}" }}.{{ "{{" }} aib.spec.export_format {{ "}}" }}"
-        #    flat: yes 
-        #    validate_checksum: yes
-        #  timeout: 600
-
         
