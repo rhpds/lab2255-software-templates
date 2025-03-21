@@ -2,7 +2,7 @@
 apiVersion: triggers.tekton.dev/v1alpha1
 kind: TriggerTemplate
 metadata:
-  name: {{ .Values.app.name }}-run-build
+  name: {{ .Values.app.name }}-run-test
 spec:
   params:
     - name: git-revision
@@ -18,7 +18,7 @@ spec:
     - apiVersion: tekton.dev/v1beta1
       kind: PipelineRun
       metadata:
-        generateName: {{ .Values.app.name }}-run-build-
+        generateName: {{ .Values.app.name }}-run-test-
         labels:
           backstage.io/kubernetes-id: {{ .Values.app.name }}
       spec:
@@ -32,7 +32,7 @@ spec:
           - name: component-id
             value: {{ .Values.app.name }}
         pipelineRef:
-          name: {{ .Values.app.name }}-build
+          name: {{ .Values.app.name }}-test
         serviceAccountName: pipeline
         timeout: 1h0m0s
         workspaces:

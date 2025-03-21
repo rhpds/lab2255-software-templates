@@ -8,7 +8,7 @@ spec:
   triggers:
     - bindings:
         - kind: TriggerBinding
-          ref: commit-binding
+          ref: tb-commit
       interceptors:
         - params:
             - name: filter
@@ -21,9 +21,10 @@ spec:
       name: commit-trig
       template:
         ref: {{ .Values.app.name }}-run-build
+    
     - bindings:
         - kind: TriggerBinding
-          ref: tag-binding-preprod
+          ref: tb-tag
       interceptors:
         - params:
             - name: filter
@@ -37,10 +38,11 @@ spec:
             name: cel
       name: tag-trig-preprod
       template:
-        ref: {{ .Values.app.name }}-run-promote
+        ref: {{ .Values.app.name }}-run-test
+    
     - bindings:
         - kind: TriggerBinding
-          ref: tag-binding-prod
+          ref: tag-release
       interceptors:
         - params:
             - name: filter
@@ -50,4 +52,4 @@ spec:
             name: cel
       name: tag-trig-prod
       template:
-        ref: {{ .Values.app.name }}-run-promote
+        ref: {{ .Values.app.name }}-run-release
