@@ -4,9 +4,10 @@ metadata:
   name: tb-tag
 spec:
   params:
-    - name: source-tag
-      value: latest
+    - name: git-repo-url
+      value: $(body.repository.git_http_url)
+    - name: git-revision
+      value: $(body.after)
     - name: destination-tag
       value: $(extensions.tag_version)
-    - name: namespace
-      value: {{ .Values.app.name }}-preprod
+    
