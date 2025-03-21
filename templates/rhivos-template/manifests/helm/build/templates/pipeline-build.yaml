@@ -37,7 +37,7 @@ spec:
         - name: output
           workspace: source-folder
     
-    - name: aib-builder
+    - name: image-builder
       params:
         - name: job_id
           value: $(params.source-branch)
@@ -52,7 +52,7 @@ spec:
         - name: source
           workspace: source-folder
 
-    - name: s3-upload
+    - name: cdn-upload
       params:
         - name: job_id
           value: $(params.source-branch)

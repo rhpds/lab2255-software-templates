@@ -13,11 +13,23 @@ spec:
       description: 'The conponent_id the job belongs to'
       type: string
       default: ''
+    
+    # aib parameters
+    - name: aib-working-dir
+      description: 'aib-working-dir'
+      type: string
+      default: '/home/workspace/builder'
+    # s3 parameters
     - name: bucket_name
       description: 'The S3 bucket name'
       type: string
       default: 'rhadp-aib-cdn'
+    
     # secrets
+    - name: aib-secrets-ref
+      description: 'Secret with the user, password, and host used to access the AIB host'
+      type: string
+      default: 'aib-credentials'
     - name: aws-config-ref
       description: 'Secret with the keys used to access the AWS infrastructure'
       type: string
@@ -26,6 +38,21 @@ spec:
     - name: s3-upload
       image: quay.io/agnosticd/ee-multicloud:latest
       env:
+        - name: AIB_USER
+          valueFrom:
+            secretKeyRef:
+              key: user
+              name: $(params.aib-secrets-ref)
+        - name: AIB_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              key: password
+              name: $(params.aib-secrets-ref)
+        - name: AIB_HOST
+          valueFrom:
+            secretKeyRef:
+              key: host
+              name: $(params.aib-secrets-ref)
         - name: AWS_ACCESS_KEY_ID
           valueFrom:
             secretKeyRef:
@@ -46,13 +73,19 @@ spec:
 
         set -x
 
-        # aib stuff
+        # playbook parameters
         export JOB_ID="$(params.job_id)"
         export COMPONENT_ID="$(params.component_id)"
         export BUCKET_NAME="$(params.bucket_name)"
-        
+        export AIB_WORKING_DIR="$(params.aib-working-dir)"
+
+        # ansible stuff
+        export ANSIBLE_HOST_KEY_CHECKING=False
+
         # run the playbook
-        ansible-playbook /scripts/s3-upload.yaml -e "AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID" -e "AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY" -e "AWS_DEFAULT_REGION=$AWS_DEFAULT_REGION" 
+        ansible-playbook /scripts/s3-upload.yaml -i $AIB_HOST, \
+          -e "ansible_user=$AIB_USER" -e "ansible_password=$AIB_PASSWORD" \
+          -e "AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID" -e "AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY" -e "AWS_DEFAULT_REGION=$AWS_DEFAULT_REGION" 
 
       volumeMounts: 
         - name: scripts-volume
