@@ -71,9 +71,9 @@ spec:
               title: Repo Host
               type: string
               description: Your SCM host
-              default: {{ gitlab_destination_group }}
+              default: {{ gitlab_host }}
               enum:
-                - {{ gitlab_destination_group }}
+                - {{ gitlab_host }}
             owner:
               title: Repo Owner
               type: string
