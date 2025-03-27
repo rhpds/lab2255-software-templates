@@ -37,6 +37,19 @@ spec:
         - name: output
           workspace: source-folder
     
+    - name: test
+      params:
+        - name: EXTRA_CMD
+          value: "ls -la"
+      taskRef:
+        kind: ClusterTask
+        name: inspect
+      runAfter:
+        - git-clone
+      workspaces:
+        - name: source
+          workspace: source-folder
+
   workspaces:
     - name: source-folder
     - name: docker-config
