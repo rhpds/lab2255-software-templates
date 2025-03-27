@@ -55,7 +55,7 @@ spec:
         - name: component_id
           value: $(params.component-id)
       runAfter:
-        - image-builder
+        - automotive-image-builder
       taskRef:
         kind: Task
         name: s3-upload-task
