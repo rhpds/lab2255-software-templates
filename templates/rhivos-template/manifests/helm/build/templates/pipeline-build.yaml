@@ -16,10 +16,6 @@ spec:
       description: source branch to build from
       default: {{ .Values.git.branch }}
       type: string
-    #- name: output-image
-    #  description: reference of the image that will get created
-    #  default: {{ include "image.dev-url" . }}
-    #  type: string
     - description: Component id
       name: component-id
       type: string
@@ -37,7 +33,7 @@ spec:
         - name: output
           workspace: source-folder
     
-    - name: image-builder
+    - name: automotive-image-builder
       params:
         - name: job_id
           value: $(params.source-branch)

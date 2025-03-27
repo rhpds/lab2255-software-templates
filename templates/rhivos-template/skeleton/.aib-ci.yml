@@ -1,10 +1,10 @@
 # each .aib-ci.yml file needs at minimum a 'default' section
 default:
   # the name of the artifact
-  name: basic
+  name: simple
   
   # how to build the artifact
-  manifest: basic.mpp.yml # has to be relative to ./manifests/
+  manifest: simple.aib.yml # has to be relative to ./manifests/
 
   # list of parameters for the automotive-image-builder
   spec:

@@ -16,10 +16,6 @@ spec:
       type: string
     - name: tag
       type: string
-    #- name: output-image
-    #  description: reference of the image that will get created
-    #  default: {{ include "image.dev-url" . }}
-    #  type: string
     - description: Component id
       name: component-id
       type: string
@@ -36,6 +32,27 @@ spec:
       workspaces:
         - name: output
           workspace: source-folder
+    
+    - name: jmp-flash
+      taskRef:
+        kind: ClusterTask
+        name: noop
+      runAfter:
+        - git-clone
+      workspaces:
+        - name: source
+          workspace: source-folder
+
+    - name: jmp-validate
+      taskRef:
+        kind: ClusterTask
+        name: noop
+      runAfter:
+        - jmp-flash
+      workspaces:
+        - name: source
+          workspace: source-folder
+  
   workspaces:
     - name: source-folder
     - name: docker-config

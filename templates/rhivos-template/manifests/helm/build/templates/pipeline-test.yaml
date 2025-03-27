@@ -16,10 +16,6 @@ spec:
       type: string
     - name: tag
       type: string
-    #- name: output-image
-    #  description: reference of the image that will get created
-    #  default: {{ include "image.dev-url" . }}
-    #  type: string
     - description: Component id
       name: component-id
       type: string
@@ -37,15 +33,22 @@ spec:
         - name: output
           workspace: source-folder
     
-    - name: test
-      params:
-        - name: EXTRA_CMD
-          value: "ls -la"
+    - name: jmp-flash-qemu
       taskRef:
         kind: ClusterTask
-        name: inspect
+        name: noop
       runAfter:
         - git-clone
+      workspaces:
+        - name: source
+          workspace: source-folder
+
+    - name: jmp-test
+      taskRef:
+        kind: ClusterTask
+        name: noop
+      runAfter:
+        - jmp-flash-qemu
       workspaces:
         - name: source
           workspace: source-folder
