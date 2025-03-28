@@ -6,34 +6,44 @@ spec:
   params:
     # job parameters
     - name: job_id
-      description: 'The reference used to track the job and access its assets'
+      description: "The reference used to track the job and access its assets"
       type: string
-      default: ''
+      default: ""
     - name: component_id
-      description: 'The conponent_id the job belongs to'
+      description: "The conponent_id the job belongs to"
       type: string
-      default: ''
-    
+      default: ""
+
     # aib parameters
     - name: aib-working-dir
-      description: 'aib-working-dir'
+      description: "aib-working-dir"
       type: string
-      default: '/home/workspace/builder'
+      default: "/home/workspace/builder"
     # s3 parameters
     - name: bucket_name
-      description: 'The S3 bucket name'
+      description: "The S3 bucket name"
       type: string
-      default: 'rhadp-aib-cdn'
-    
+      default: "rhadp-aib-cdn"
+
     # secrets
     - name: aib-secrets-ref
-      description: 'Secret with the user, password, and host used to access the AIB host'
+      description: "Secret with the user, password, and host used to access the AIB host"
       type: string
-      default: 'aib-credentials'
-    
+      default: "aib-credentials"
+
+    # ANSIBLE configuration
+    - name: ansible-playbook
+      description: "Ansible playbook to run"
+      type: string
+      default: "s3-upload.yaml"
+    - name: ansible-playbook-location
+      description: "Location of the Ansible playbooks, relative to the source directory"
+      type: string
+      default: "scripts/ansible"
+
   steps:
     - name: s3-upload
-      image: quay.io/agnosticd/ee-multicloud:latest
+      image: quay.io/agnosticd/ee-multicloud:latest # TODO: replace with own container
       env:
         - name: AIB_USER
           valueFrom:
@@ -50,11 +60,11 @@ spec:
             secretKeyRef:
               key: host
               name: $(params.aib-secrets-ref)
-        
+
       script: |
         #!/usr/bin/env bash
 
-        set -x
+        set -eux
 
         # playbook parameters
         export JOB_ID="$(params.job_id)"
@@ -66,18 +76,9 @@ spec:
         export ANSIBLE_HOST_KEY_CHECKING=False
 
         # run the playbook
-        ansible-playbook /scripts/s3-upload.yaml \
-          -i $AIB_HOST, -e "ansible_user=$AIB_USER" -e "ansible_password=$AIB_PASSWORD"
+        export PATH_TO_PLAYBOOK="/workspace/source/$(params.ansible-playbook-location)/$(params.ansible-playbook)"
 
-      volumeMounts: 
-        - name: scripts-volume
-          mountPath: /scripts
-  volumes:
-    - name: scripts-volume
-      configMap:
-        name: {{ .Values.app.name }}-ansible-scripts
-        items:
-          - key: s3-upload.yaml
-            path: s3-upload.yaml
+        ansible-playbook PATH_TO_PLAYBOOK -i $AIB_HOST, -e "ansible_user=$AIB_USER" -e "ansible_password=$AIB_PASSWORD"
+
   workspaces:
     - name: source

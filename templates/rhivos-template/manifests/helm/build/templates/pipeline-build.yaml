@@ -40,7 +40,7 @@ spec:
         - name: component_id
           value: $(params.component-id)
       taskRef:
-        kind: Task
+        kind: ClusterTask
         name: aib-builder-task
       runAfter:
         - git-clone
@@ -57,7 +57,7 @@ spec:
       runAfter:
         - automotive-image-builder
       taskRef:
-        kind: Task
+        kind: ClusterTask
         name: s3-upload-task
       workspaces:
         - name: source

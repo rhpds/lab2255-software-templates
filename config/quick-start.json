@@ -23,6 +23,11 @@
         "iconUrl": "/homepage/icons/podman_logo.svg",
         "label": "Podman Desktop",
         "url": "https://podman-desktop.io"
+      },
+      {
+        "iconUrl": "/homepage/icons/quay.svg",
+        "label": "Quay.io",
+        "url": "https://quay.io/"
       }
     ]
   },
@@ -34,11 +39,6 @@
         "iconUrl": "/homepage/icons/argo-icon-color.svg",
         "label": "ArgoCD",
         "url": ""
-      },
-      {
-        "iconUrl": "/homepage/icons/quay.svg",
-        "label": "Quay.io",
-        "url": "https://quay.io/"
       }
     ]
   },
