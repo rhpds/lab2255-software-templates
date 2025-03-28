@@ -6,4 +6,5 @@ metadata:
 spec:
   type: url
   targets:
-    - templates/rhivos-template/template.yaml
+    - templates/rhivos-build-template/template.yaml
+    - templates/autosd-app-template/template.yaml

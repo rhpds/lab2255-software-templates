@@ -1,9 +1,9 @@
 apiVersion: scaffolder.backstage.io/v1beta3
 kind: Template
 metadata:
-  name: rhivos-template
-  title: Simple RHIVOS Build
-  description: Build the Red Hat In-Vehicle OS
+  name: autosd-app-template
+  title: AutoSD Sample Application
+  description: Demonstrates how AutoSD effectively constrains the memory usage in the QM partition.
   tags:
     - automotive
     - rhivos
@@ -19,14 +19,14 @@ spec:
           title: Name
           type: string
           description: Unique name of the project
-          default: rhivos-build
+          default: autosd-ffi
           ui:field: EntityNamePicker
           maxLength: 23
         description:
           title: Description
           type: string
           description: Help others understand what this build is for.
-          default: Basic RHIVOS development image
+          default: Demonstrates how AutoSD effectively constrains the memory usage in the QM partition.
     
     - title: Provide Image Registry Information
       required:
