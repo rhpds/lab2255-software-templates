@@ -1,0 +1,9 @@
+_build
+.secure_files
+*.tar.gz
+*.pem
+*.qcow2
+*.img
+ostree-repo
+automotive-image-builder
+images/files/dummy_pi

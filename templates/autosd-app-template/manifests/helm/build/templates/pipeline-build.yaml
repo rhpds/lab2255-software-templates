@@ -41,10 +41,12 @@ spec:
       params:
         - name: IMAGE
           value: $(params.output-image)
+        - name: CONTEXT
+          value: ./src
         - name: DOCKERFILE
-          value: ./binaries/Containerfile
-        - name: SKIP_PUSH # for testing purposes !
-          value: 'true'
+          value: ./src/containers/ffi_server/Containerfile
+        #- name: SKIP_PUSH # for testing purposes !
+        #  value: 'true'
       runAfter:
         - git-clone
       taskRef:

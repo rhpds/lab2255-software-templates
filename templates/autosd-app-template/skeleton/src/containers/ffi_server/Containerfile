@@ -1,0 +1,12 @@
+ARG FEDORA_VERSION=39
+
+FROM fedora:${FEDORA_VERSION}
+
+RUN dnf install -y dnf-plugins-core \
+    && dnf -y update \
+    && dnf install -y python3-devel \
+    && dnf clean all
+
+EXPOSE 7001/tcp
+COPY server.py /usr/bin/ffi-server
+CMD [ "ffi-server" ]
