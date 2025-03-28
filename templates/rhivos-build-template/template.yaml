@@ -3,7 +3,7 @@ kind: Template
 metadata:
   name: rhivos-build-template
   title: Simple RHIVOS Build
-  description: Build the Red Hat In-Vehicle OS
+  description: Build and validate a Red Hat In-Vehicle OS image
   tags:
     - automotive
     - rhivos
@@ -153,7 +153,7 @@ spec:
           image_name: ${{ parameters.component_id }}
           image_tag: ${{ parameters.image_tag }}
           repository_host: ${{ parameters.repo.host }}
-          deployment_name: quarkus-template
+          deployment_name: rhivos-build-template
           user: ${{ user.entity.metadata.name }}
         targetPath: ./tenant-gitops
 
