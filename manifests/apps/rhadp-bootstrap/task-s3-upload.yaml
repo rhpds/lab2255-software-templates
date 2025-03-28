@@ -78,7 +78,7 @@ spec:
         # run the playbook
         export PATH_TO_PLAYBOOK="/workspace/source/$(params.ansible-playbook-location)/$(params.ansible-playbook)"
 
-        ansible-playbook PATH_TO_PLAYBOOK -i $AIB_HOST, -e "ansible_user=$AIB_USER" -e "ansible_password=$AIB_PASSWORD"
+        ansible-playbook $PATH_TO_PLAYBOOK -i $AIB_HOST, -e "ansible_user=$AIB_USER" -e "ansible_password=$AIB_PASSWORD"
 
   workspaces:
     - name: source
