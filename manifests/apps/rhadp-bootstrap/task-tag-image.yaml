@@ -23,8 +23,11 @@ spec:
       script: |
         #!/usr/bin/env bash
 
-        ls -la /workspace/dockerconfig
-        cat /workspace/dockerconfig/config.json
+        #ls -la /workspace/dockerconfig
+        #cat /workspace/dockerconfig/config.json
+
+        echo "source-image: ${source-image}"
+        echo "target-image: ${target-image}"
 
         skopeo copy --authfile=/workspace/dockerconfig/config.json ${source-image} ${target-image}
 
