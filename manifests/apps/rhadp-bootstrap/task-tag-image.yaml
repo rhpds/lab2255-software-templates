@@ -36,7 +36,7 @@ spec:
 
       volumeMounts:
         - mountPath: /var/lib/containers
-          name: varlibcontainers
+          name: dockerconfig
   workspaces:
     - name: dockerconfig
       description: Includes a docker `config.json`
