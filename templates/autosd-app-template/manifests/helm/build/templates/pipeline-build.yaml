@@ -37,16 +37,33 @@ spec:
         - name: output
           workspace: source-folder
 
-    - name: build-and-push
+    - name: build-server
       params:
         - name: IMAGE
-          value: $(params.output-image)
+          value: $(params.output-image):$(params.source-branch)-server
         - name: CONTEXT
-          value: ./src
+          value: ./src/containers/ffi_server
         - name: DOCKERFILE
-          value: ./src/containers/ffi_server/Containerfile
-        #- name: SKIP_PUSH # for testing purposes !
-        #  value: 'true'
+          value: ./Containerfile
+      runAfter:
+        - git-clone
+      taskRef:
+        kind: ClusterTask
+        name: buildah
+      workspaces:
+        - name: source
+          workspace: source-folder
+        - name: dockerconfig
+          workspace: docker-config
+
+    - name: build-client
+      params:
+        - name: IMAGE
+          value: $(params.output-image):$(params.source-branch)-client
+        - name: CONTEXT
+          value: ./src/containers/ffi_client
+        - name: DOCKERFILE
+          value: ./Containerfile
       runAfter:
         - git-clone
       taskRef:

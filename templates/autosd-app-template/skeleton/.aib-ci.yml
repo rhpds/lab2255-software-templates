@@ -9,7 +9,7 @@ default:
   # list of parameters for the automotive-image-builder
   spec:
     distro: autosd9  # autosd cs9
-    arch: x86_64 # aarch64 x86_64
+    arch: aarch64 # aarch64 x86_64
     target: qemu # rpi4 qemu
     mode: package # package image
     export_format: qcow2 # image qcow2 container

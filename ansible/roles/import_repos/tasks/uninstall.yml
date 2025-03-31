@@ -1,0 +1,31 @@
+# Implement your uninstall deployment tasks here
+# -------------------------------------------------
+
+- name: delete repo
+  ignore_errors: true
+  block:
+    - name: lookup project
+      uri:
+        url: https://{{ gitlab_host }}/api/v4/projects?search={{ templates_repo_name }}
+        method: GET
+        validate_certs: false
+      register: r_project
+      until: r_project.status == 200 or r_project.status == 403
+      retries: 5
+      delay: 10
+
+    - name: register project id
+      set_fact:
+        project_id: "{{ r_project.json[0].id }}"
+      when: r_project.status == 200 and r_project.json[0].id is defined
+
+    - name: delete project
+      uri:
+        url: https://{{ gitlab_host }}/api/v4/projects/{{ project_id }}
+        method: DELETE
+        headers:
+          PRIVATE-TOKEN: "{{ gitlab_token }}"
+        validate_certs: false
+        status_code: 202
+      register: r_project_delete
+      when: project_id is defined

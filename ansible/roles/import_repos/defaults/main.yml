@@ -1,0 +1,9 @@
+---
+# defaults
+gitlab_namespace: "gitlab"
+
+# developer hub templates
+templates_repo_group: "rhdh"
+templates_repo_name: "lab2255-templates"
+templates_repo_url: "https://github.com/rhadp-example-repos/lab2255-templates"
+templates_repo_branch: "develop"
