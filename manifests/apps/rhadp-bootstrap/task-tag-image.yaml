@@ -26,10 +26,10 @@ spec:
         #ls -la /workspace/dockerconfig
         #cat /workspace/dockerconfig/config.json
 
-        echo "source-image: ${source-image-tag}"
-        echo "target-image: ${target-image-tag}"
+        echo "source-image: ${params.source-image-tag}"
+        echo "target-image: ${params.target-image-tag}"
 
-        skopeo copy --authfile=/workspace/dockerconfig/config.json ${source-image-tag} ${target-image-image}
+        skopeo copy --authfile=/workspace/dockerconfig/config.json ${params.source-image-tag} ${params.target-image-tag}
 
         #skopeo copy docker://${source-image} docker://${target-image}
 
