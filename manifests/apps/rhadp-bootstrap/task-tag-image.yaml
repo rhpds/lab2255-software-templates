@@ -5,14 +5,14 @@ metadata:
 spec:
   description: Nothing to do
   params:
-    - default: ""
+    - name: source-image-tag
       description: URL of the image to be copied to the destination registry
-      name: source-image
       type: string
-    - default: ""
+      default: ""
+    - name: target-image-tag
       description: URL of the image where the image from source should be copied to
-      name: target-image
       type: string
+      default: ""
   steps:
     - name: tag-image
       image: quay.io/skopeo/stable:latest
@@ -26,10 +26,10 @@ spec:
         #ls -la /workspace/dockerconfig
         #cat /workspace/dockerconfig/config.json
 
-        echo "source-image: ${source-image}"
-        echo "target-image: ${target-image}"
+        echo "source-image: ${source-image-tag}"
+        echo "target-image: ${target-image-tag}"
 
-        skopeo copy --authfile=/workspace/dockerconfig/config.json ${source-image} ${target-image}
+        skopeo copy --authfile=/workspace/dockerconfig/config.json ${source-image-tag} ${target-image-image}
 
         #skopeo copy docker://${source-image} docker://${target-image}
 
