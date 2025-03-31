@@ -26,8 +26,9 @@ spec:
         ls -la /workspace/dockerconfig
         cat /workspace/dockerconfig/config.json
 
-        skopeo copy --dest-creds=$(cat /workspace/dockerconfig/config.json) \
-          docker://${source-image} docker://${target-image}
+        skopeo copy --dest-creds=$(cat /workspace/dockerconfig/config.json) ${source-image} ${target-image}
+
+        #skopeo copy docker://${source-image} docker://${target-image}
 
       securityContext:
         runAsNonRoot: true
