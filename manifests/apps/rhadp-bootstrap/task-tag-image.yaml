@@ -5,28 +5,33 @@ metadata:
 spec:
   description: Nothing to do
   params:
-    - default: ''
+    - default: ""
       description: URL of the image to be copied to the destination registry
       name: source-image
       type: string
-    - default: ''
+    - default: ""
       description: URL of the image where the image from source should be copied to
       name: target-image
       type: string
   steps:
     - name: tag-image
       image: quay.io/skopeo/stable:latest
+      env:
+        - name: HOME
+          value: /tekton/home
       resources: {}
       script: |
         #!/usr/bin/env bash
 
-        skopeo copy --dest-creds=$(cat /workspace/dockerconfig/.dockerconfigjson) \
+        ls -la /workspace/dockerconfig
+
+        skopeo copy --dest-creds=$(cat /workspace/dockerconfig/.dockercfg) \
           docker://${source-image} docker://${target-image}
-      
+
       securityContext:
         runAsNonRoot: true
         runAsUser: 65532
-      
+
       #volumeMounts:
       #  - mountPath: /var/lib/containers
       #    name: varlibcontainers
