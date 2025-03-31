@@ -27,7 +27,7 @@
     
     - name: create more facts 2
       set_fact:
-        manifest_file_path: "{{ build_location }}/manifests/{{ aib.manifest }}"
+        manifest_file_path: "{{ build_location }}/source/manifests/{{ aib.manifest }}"
         image_file_path: "{{ aib_working_dir }}/builds/{{ job_id }}_{{ image_name }}"
 
     - name: check if the image already exists
@@ -45,21 +45,19 @@
           ansible.builtin.file:
             path: "{{ build_location }}"
             state: absent
-            #state: directory
-        
-        - name: clone the content for the build
+            
+        - name: recreate the working directory
           become: true
-          ansible.builtin.git:
-            repo: "{{ source_repo }}"
-            dest: "{{ build_location }}"
-            version: "{{ source_branch }}"
+          ansible.builtin.file:
+            path: "{{ build_location }}"
+            state: directory
 
-        #- name: transfer the manifest
-        #  become: true
-        #  ansible.builtin.copy:
-        #    src: "/workspace/source/manifests/{{ aib.manifest }}"
-        #    dest: "{{ manifest_file_path }}"
-        #    mode: "0644"
+        - name: transfer the /workspace to the build location
+          become: true
+          ansible.builtin.copy:
+            src: "/workspace/source"
+            dest: "{{ build_location }}"
+            mode: "0755"
 
         - name: build the image 
           become: true
