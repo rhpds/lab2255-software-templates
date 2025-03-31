@@ -34,9 +34,9 @@ spec:
         runAsNonRoot: true
         runAsUser: 65532
 
-      volumeMounts:
-        - mountPath: /var/lib/containers
-          name: dockerconfig
+      #volumeMounts:
+      #  - mountPath: /var/lib/containers
+      #    name: dockerconfig
   workspaces:
     - name: dockerconfig
       description: Includes a docker `config.json`
