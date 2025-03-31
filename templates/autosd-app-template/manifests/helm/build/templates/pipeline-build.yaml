@@ -58,9 +58,9 @@ spec:
 
     - name: tag-server
       params:
-        - name: source-image
+        - name: source-image-tag
           value: $(params.output-image):$(params.source-branch)-server
-        - name: target-image
+        - name: target-image-tag
           value: $(params.output-image):latest-server
       runAfter:
         - build-server
@@ -92,9 +92,9 @@ spec:
 
     - name: tag-client
       params:
-        - name: source-image
+        - name: source-image-tag
           value: $(params.output-image):$(params.source-branch)-client
-        - name: target-image
+        - name: target-image-tag
           value: $(params.output-image):latest-client
       runAfter:
         - build-client

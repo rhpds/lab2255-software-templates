@@ -23,15 +23,7 @@ spec:
       script: |
         #!/usr/bin/env bash
 
-        #ls -la /workspace/dockerconfig
-        #cat /workspace/dockerconfig/config.json
-
-        echo "source-image: $(params.source-image-tag)"
-        echo "target-image: $(params.target-image-tag)"
-
-        skopeo copy --authfile=/workspace/dockerconfig/config.json $(params.source-image-tag) $(params.target-image-tag)
-
-        #skopeo copy docker://${source-image} docker://${target-image}
+        skopeo copy --authfile=/workspace/dockerconfig/config.json docker://$(params.source-image-tag) docker://$(params.target-image-tag)
 
       securityContext:
         runAsNonRoot: true
