@@ -24,8 +24,9 @@ spec:
         #!/usr/bin/env bash
 
         ls -la /workspace/dockerconfig
+        cat /workspace/dockerconfig/config.json
 
-        skopeo copy --dest-creds=$(cat /workspace/dockerconfig/.dockercfg) \
+        skopeo copy --dest-creds=$(cat /workspace/dockerconfig/config.json) \
           docker://${source-image} docker://${target-image}
 
       securityContext:
