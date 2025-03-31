@@ -8,13 +8,13 @@ spec:
       name: COMPONENT_ID
       type: string
   steps:
-    - args:
-        - >-
-          oc delete pod -n $(params.COMPONENT_ID)-dev -l
-          app.kubernetes.io/instance=$(params.COMPONENT_ID)-dev
-      command:
-        - /bin/bash
-        - '-c'
+    - name: resync
       image: 'quay.io/openshift/origin-cli:latest'
-      name: resync
+      script: |
+        #!/usr/bin/env bash
+
+        oc delete pod -n $(params.COMPONENT_ID)-server -l app.kubernetes.io/instance=$(params.COMPONENT_ID)-server
+
+        oc delete pod -n $(params.COMPONENT_ID)-client -l app.kubernetes.io/instance=$(params.COMPONENT_ID)-client
+
       resources: {}

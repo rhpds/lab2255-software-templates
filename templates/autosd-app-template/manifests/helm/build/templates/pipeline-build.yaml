@@ -75,7 +75,7 @@ spec:
         - name: dockerconfig
           workspace: docker-config
 
-    - name: resync
+    - name: deploy
       params:
         - name: COMPONENT_ID
           value: $(params.component-id)

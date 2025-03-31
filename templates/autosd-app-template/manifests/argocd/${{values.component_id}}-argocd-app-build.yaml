@@ -2,7 +2,7 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: ${{ values.component_id }}-dev-build
+  name: ${{ values.component_id }}-build
   namespace: janus-argocd
   finalizers:
     - resources-finalizer.argocd.argoproj.io
@@ -16,7 +16,7 @@ spec:
     path: ./helm/build
   destination:
     server: https://kubernetes.default.svc
-    namespace: ${{ values.component_id }}-dev
+    namespace: ${{ values.component_id }}-build
   syncPolicy:
     automated:
       prune: true
