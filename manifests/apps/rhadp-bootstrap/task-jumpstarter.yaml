@@ -6,9 +6,27 @@ spec:
   description: |
     Do something with Jumpstarter
   params:
-    - name: EXTRA_CMD
+    # job parameters
+    - name: job_id
+      description: "the reference used to track the job and access its assets"
       type: string
-      default: "ls -la"
+      default: ""
+    - name: component_id
+      description: "the conponent_id the job belongs to"
+      type: string
+      default: ""
+    # repo parameters
+    - name: source-repo
+      description: "source repo that contains the application code"
+      type: string
+      default: ""
+    - name: source-branch
+      description: s"ource branch to build from"
+      type: string
+      default: ""
+    - name: tag
+      type: string
+      default: ""
   steps:
     - name: jmp
       image: quay.io/rhadp-example-repos/jumpstarter:latest
@@ -23,7 +41,7 @@ spec:
         [[ -f $(workspaces.kubeconfig-dir.path)/kubeconfig ]] && \
         export KUBECONFIG=$(workspaces.kubeconfig-dir.path)/kubeconfig
 
-        $(params.EXTRA_CMD)
+        # do something with jumpstarter
 
       workingDir: $(workspaces.source.path)
       securityContext:

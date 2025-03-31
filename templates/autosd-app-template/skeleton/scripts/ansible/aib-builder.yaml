@@ -6,6 +6,9 @@
       set_fact:
         job_id: "{{ lookup('env', 'JOB_ID') }}"
         component_id: "{{ lookup('env', 'COMPONENT_ID') }}"
+        source_repo: "{{ lookup('env', 'SOURCE_REPO') }}"
+        source_branch: "{{ lookup('env', 'SOURCE_BRANCH') }}"
+        source_tag: "{{ lookup('env', 'SOURCE_TAG') }}"
         aib_working_dir: "{{ lookup('env', 'AIB_WORKING_DIR') }}"
         aib_container_image: "{{ lookup('env', 'AIB_CONTAINER_IMAGE') }}"
     
@@ -24,7 +27,7 @@
     
     - name: create more facts 2
       set_fact:
-        manifest_file_path: "{{ build_location }}/{{ aib.manifest }}"
+        manifest_file_path: "{{ build_location }}/manifests/{{ aib.manifest }}"
         image_file_path: "{{ aib_working_dir }}/builds/{{ job_id }}_{{ image_name }}"
 
     - name: check if the image already exists

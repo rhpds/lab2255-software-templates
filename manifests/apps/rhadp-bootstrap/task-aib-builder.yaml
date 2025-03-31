@@ -6,14 +6,26 @@ spec:
   params:
     # job parameters
     - name: job_id
-      description: "The reference used to track the job and access its assets"
+      description: "the reference used to track the job and access its assets"
       type: string
       default: ""
     - name: component_id
-      description: "The conponent_id the job belongs to"
+      description: "the conponent_id the job belongs to"
       type: string
       default: ""
-
+    # repo parameters
+    - name: source-repo
+      description: "source repo that contains the application code"
+      type: string
+      default: ""
+    - name: source-branch
+      description: s"ource branch to build from"
+      type: string
+      default: ""
+    - name: tag
+      type: string
+      default: ""
+    
     # aib parameters
     - name: aib-working-dir
       description: "aib-working-dir"
@@ -67,6 +79,11 @@ spec:
         # playbook parameters
         export JOB_ID="$(params.job_id)"
         export COMPONENT_ID="$(params.component_id)"
+
+        export SOURCE_REPO="$(params.source-repo)"
+        export SOURCE_BRANCH="$(params.source-branch)"
+        export SOURCE_TAG="$(params.tag)"
+        
         export AIB_WORKING_DIR="$(params.aib-working-dir)"
         export AIB_CONTAINER_IMAGE="$(params.aib-container-image)"
 

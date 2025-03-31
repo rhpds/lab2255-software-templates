@@ -6,6 +6,9 @@
       set_fact:
         job_id: "{{ lookup('env', 'JOB_ID') }}"
         component_id: "{{ lookup('env', 'COMPONENT_ID') }}"
+        source_repo: "{{ lookup('env', 'SOURCE_REPO') }}"
+        source_branch: "{{ lookup('env', 'SOURCE_BRANCH') }}"
+        source_tag: "{{ lookup('env', 'SOURCE_TAG') }}"
         aib_working_dir: "{{ lookup('env', 'AIB_WORKING_DIR') }}"
         aib_container_image: "{{ lookup('env', 'AIB_CONTAINER_IMAGE') }}"
     
@@ -24,7 +27,7 @@
     
     - name: create more facts 2
       set_fact:
-        manifest_file_path: "{{ build_location }}/{{ aib.manifest }}"
+        manifest_file_path: "{{ build_location }}/manifests/{{ aib.manifest }}"
         image_file_path: "{{ aib_working_dir }}/builds/{{ job_id }}_{{ image_name }}"
 
     - name: check if the image already exists
@@ -37,18 +40,26 @@
       when: image_stat.stat.exists == false
       block:
 
-        - name: create the working directory
+        - name: remove the working directory
           become: true
           ansible.builtin.file:
             path: "{{ build_location }}"
-            state: directory
-
-        - name: transfer the manifest
+            state: absent
+            #state: directory
+        
+        - name: clone the content for the build
           become: true
-          ansible.builtin.copy:
-            src: "/workspace/source/manifests/{{ aib.manifest }}"
-            dest: "{{ manifest_file_path }}"
-            mode: "0644"
+          ansible.builtin.git:
+            repo: "{{ source_repo }}"
+            dest: "{{ build_location }}"
+            version: "{{ source_branch }}"
+
+        #- name: transfer the manifest
+        #  become: true
+        #  ansible.builtin.copy:
+        #    src: "/workspace/source/manifests/{{ aib.manifest }}"
+        #    dest: "{{ manifest_file_path }}"
+        #    mode: "0644"
 
         - name: build the image 
           become: true
