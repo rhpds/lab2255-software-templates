@@ -1,0 +1,36 @@
+kind: ClusterTask
+apiVersion: tekton.dev/v1beta1
+metadata:
+  name: tag-image
+spec:
+  description: Nothing to do
+  params:
+    - default: ''
+      description: URL of the image to be copied to the destination registry
+      name: source-image
+      type: string
+    - default: ''
+      description: URL of the image where the image from source should be copied to
+      name: target-image
+      type: string
+  steps:
+    - name: tag-image
+      image: quay.io/skopeo/stable:latest
+      resources: {}
+      script: |
+        #!/usr/bin/env bash
+
+        skopeo copy --dest-creds=$(cat /workspace/dockerconfig/.dockerconfigjson) \
+          docker://${source-image} docker://${target-image}
+      
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 65532
+      
+      #volumeMounts:
+      #  - mountPath: /var/lib/containers
+      #    name: varlibcontainers
+  workspaces:
+    - name: dockerconfig
+      description: Includes a docker `config.json`
+      optional: true

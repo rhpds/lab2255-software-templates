@@ -13,8 +13,6 @@ spec:
       script: |
         #!/usr/bin/env bash
 
-        oc delete pod -n $(params.COMPONENT_ID)-server -l app.kubernetes.io/instance=$(params.COMPONENT_ID)-server
-
-        oc delete pod -n $(params.COMPONENT_ID)-client -l app.kubernetes.io/instance=$(params.COMPONENT_ID)-client
+        oc delete pod -n $(params.COMPONENT_ID)-dev -l app.kubernetes.io/instance=$(params.COMPONENT_ID)-dev
 
       resources: {}

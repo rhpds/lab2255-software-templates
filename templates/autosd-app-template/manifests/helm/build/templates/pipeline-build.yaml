@@ -56,6 +56,21 @@ spec:
         - name: dockerconfig
           workspace: docker-config
 
+    - name: tag-server
+      params:
+        - name: source-image
+          value: $(params.output-image):$(params.source-branch)-server
+        - name: target-image
+          value: $(params.output-image):latest-server
+      runAfter:
+        - build-server
+      taskRef:
+        kind: ClusterTask
+        name: tag-image
+      workspaces:
+        - name: dockerconfig
+          workspace: docker-config
+        
     - name: build-client
       params:
         - name: IMAGE
@@ -75,13 +90,28 @@ spec:
         - name: dockerconfig
           workspace: docker-config
 
+    - name: tag-client
+      params:
+        - name: source-image
+          value: $(params.output-image):$(params.source-branch)-client
+        - name: target-image
+          value: $(params.output-image):latest-client
+      runAfter:
+        - build-client
+      taskRef:
+        kind: ClusterTask
+        name: tag-image
+      workspaces:
+        - name: dockerconfig
+          workspace: docker-config
+        
     - name: deploy
       params:
         - name: COMPONENT_ID
           value: $(params.component-id)
       runAfter:
-        - build-server
-        - build-client
+        - tag-server
+        - tag-client
       taskRef:
         kind: Task
         name: resync
