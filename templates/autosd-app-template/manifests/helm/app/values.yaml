@@ -45,7 +45,7 @@ securityContext: {}
 
 service:
   type: ClusterIP
-  port: ${{values.port}}
+  port: 7001
 
 route:
   host: ""

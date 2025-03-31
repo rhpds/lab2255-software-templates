@@ -153,7 +153,7 @@ spec:
           image_name: ${{ parameters.component_id }}
           image_tag: ${{ parameters.image_tag }}
           repository_host: ${{ parameters.repo.host }}
-          deployment_name: autosd-app-template
+          deployment_name: ${{ parameters.component_id }}
           user: ${{ user.entity.metadata.name }}
         targetPath: ./tenant-gitops
 
