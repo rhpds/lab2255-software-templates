@@ -12,7 +12,7 @@ metadata:
     backstage.io/source-location: url:https://${{values.host}}/${{values.destination}}
     backstage.io/techdocs-ref: url:https://${{values.host}}/${{values.destination}}
     gitlab.com/project-slug: ${{values.destination}}
-    quay.io/repository-slug: ${{values.quay_destination | dump}}
+    quay.io/repository-slug: ${{values.registry_destination | dump}}
   tags:
     - automotive
     - rhivos

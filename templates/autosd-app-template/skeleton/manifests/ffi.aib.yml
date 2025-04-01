@@ -27,15 +27,15 @@ content:
     - vim
     - dnf
 
-#  container_images:
-#    - source: localhost/ffi_server
-#      tag: latest
-#      name: localhost/ffi_server
-#      containers-transport: containers-storage
-#    - source: localhost/sysbench
-#      tag: latest
-#      name: localhost/sysbench
-#      containers-transport: containers-storage
+  container_images:
+    - source: ${{values.registry_host}}/${{values.registry_destination}}
+      tag: latest-server
+      name: localhost/ffi_server
+      #containers-transport: containers-storage
+    #- source: localhost/sysbench
+    #  tag: latest
+    #  name: localhost/sysbench
+    #  containers-transport: containers-storage
 #
 #  make_dirs:
 #    - path: /etc/containers/systemd/qm.container.d

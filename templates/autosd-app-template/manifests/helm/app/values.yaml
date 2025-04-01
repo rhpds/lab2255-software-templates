@@ -12,8 +12,8 @@ replicaCount: 1
 image:
   pullPolicy: Always
   registry: ${{values.image_registry}}
-  host: ${{values.image_host}}
-  organization: ${{values.image_organization}}
+  host: ${{values.registry_host}}
+  organization: ${{values.registry_organization}}
   name: ${{values.image_name}}
   # Overrides the image tag whose default is the chart appVersion.
 

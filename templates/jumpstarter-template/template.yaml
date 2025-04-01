@@ -114,7 +114,7 @@ spec:
           cluster: .apps.cluster-lptwk.lptwk.sandbox1315.opentlc.com
           host: ${{ parameters.repo.host }}
           destination: ${{ parameters.repo.owner }}/${{ parameters.component_id }}
-          quay_destination: ${{ parameters.image_organization}}/${{ parameters.component_id }}
+          registry_destination: ${{ parameters.image_organization}}/${{ parameters.component_id }}
 
     - id: publish
       name: Publish
@@ -148,8 +148,8 @@ spec:
           cluster: .apps.cluster-lptwk.lptwk.sandbox1315.opentlc.com
           namespace: ${{ parameters.component_id }}-dev
           image_registry: ${{ parameters.image_registry }}
-          image_host: ${{ parameters.image_host }}
-          image_organization: ${{ parameters.image_organization }}
+          registry_host: ${{ parameters.image_host }}
+          registry_organization: ${{ parameters.image_organization }}
           image_name: ${{ parameters.component_id }}
           image_tag: ${{ parameters.image_tag }}
           repository_host: ${{ parameters.repo.host }}

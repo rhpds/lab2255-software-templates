@@ -91,7 +91,8 @@ spec:
           cluster: .apps.cluster-${{ parameters.guid }}.${{ parameters.guid }}.${{ parameters.base_domain }}
           host: gitlab-gitlab.apps.cluster-${{ parameters.guid }}.${{ parameters.guid }}.${{ parameters.base_domain }}
           destination: ${{ parameters.repo.owner }}/${{ parameters.component_id }}
-          quay_destination: ${{ parameters.registry.organization}}/${{ parameters.component_id }}
+          registry_host: quay-${{ parameters.guid }}.apps.cluster-${{ parameters.guid }}.${{ parameters.guid }}.${{ parameters.base_domain }}
+          registry_destination: ${{ parameters.registry.organization}}/${{ parameters.component_id }}
 
     - id: publish
       name: Publish
@@ -125,8 +126,8 @@ spec:
           cluster: .apps.cluster-${{ parameters.guid }}.${{ parameters.guid }}.${{ parameters.base_domain }}
           namespace: ${{ parameters.component_id }}-dev
           image_registry: "Quay"
-          image_host: quay-${{ parameters.guid }}.apps.cluster-${{ parameters.guid }}.${{ parameters.guid }}.${{ parameters.base_domain }}
-          image_organization: ${{ parameters.registry.organization }}
+          registry_host: quay-${{ parameters.guid }}.apps.cluster-${{ parameters.guid }}.${{ parameters.guid }}.${{ parameters.base_domain }}
+          registry_organization: ${{ parameters.registry.organization }}
           image_name: ${{ parameters.component_id }}
           image_tag: ${{ parameters.registry.image_tag }}
           repository_host: gitlab-gitlab.apps.cluster-${{ parameters.guid }}.${{ parameters.guid }}.${{ parameters.base_domain }}
