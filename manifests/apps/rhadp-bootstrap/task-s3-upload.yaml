@@ -25,7 +25,6 @@ spec:
     - name: tag
       type: string
       default: ""
-
     # aib parameters
     - name: aib-working-dir
       description: "aib-working-dir"
@@ -36,13 +35,11 @@ spec:
       description: "The S3 bucket name"
       type: string
       default: "rhadp-aib-cdn"
-
     # secrets
     - name: aib-secrets-ref
       description: "Secret with the user, password, and host used to access the AIB host"
       type: string
       default: "aib-credentials"
-
     # ANSIBLE configuration
     - name: ansible-playbook
       description: "Ansible playbook to run"
@@ -85,7 +82,7 @@ spec:
         export SOURCE_REPO="$(params.source-repo)"
         export SOURCE_BRANCH="$(params.source-branch)"
         export SOURCE_TAG="$(params.tag)"
-        
+
         export BUCKET_NAME="$(params.bucket_name)"
         export AIB_WORKING_DIR="$(params.aib-working-dir)"
 
