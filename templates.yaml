@@ -7,5 +7,5 @@ spec:
   type: url
   targets:
     - templates/autosd-app-template/template.yaml
-    #- templates/rhivos-build-template/template.yaml
+    - templates/jumpstarter-template/template.yaml
     
