@@ -1,6 +1,6 @@
-ARG FEDORA_VERSION=39
+ARG CONTAINER_BASE="fedora:39"
 
-FROM fedora:${FEDORA_VERSION}
+FROM $CONTAINER_BASE
 
 RUN dnf install -y dnf-plugins-core \
     && dnf -y update \

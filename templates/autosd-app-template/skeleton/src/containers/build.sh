@@ -1,18 +1,11 @@
 #!/bin/bash
 
-FEDORA_VERSION=40
+CONTAINER_BASE="centos:stream9"
 
-# Build "ffi_client" container
-podman build -t localhost/ffi_client:latest \
-    --build-arg FEDORA_VERSION=$FEDORA_VERSION \
-    ffi_client
-
-# Build "ffi_server" container
-podman build -t localhost/ffi_server:latest \
-    --build-arg FEDORA_VERSION=$FEDORA_VERSION \
-    ffi_server
-
-# Build "sysbench" container
-podman build -t localhost/sysbench:latest \
-    --build-arg FEDORA_VERSION=$FEDORA_VERSION \
-    sysbench
+# Build all containers
+for i in $(ls -1 | grep -v ${0}); do
+    echo "Building ${i} ..."
+    podman build -t localhost/${i}:latest \
+    --build-arg CONTAINER_BASE=$CONTAINER_BASE \
+    ${i}
+done

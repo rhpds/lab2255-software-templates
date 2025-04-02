@@ -1,6 +1,9 @@
-ARG FEDORA_VERSION=39
+ARG CONTAINER_BASE="fedora:39"
 
-FROM fedora:${FEDORA_VERSION}
+FROM $CONTAINER_BASE
+
+# Enable EPEL
+RUN dnf -y install https://dl.fedoraproject.org/pub/epel/epel{,-next}-release-latest-9.noarch.rpm
 
 RUN dnf install -y sysbench \
     && dnf -y update \

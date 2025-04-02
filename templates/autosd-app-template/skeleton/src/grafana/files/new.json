@@ -9,11 +9,11 @@
         "slug": "pcp-vector-checklist",
         "url": "/d/pcp-vector-checklist/pcp-vector-checklist",
         "expires": "0001-01-01T00:00:00Z",
-        "created": "2025-03-17T17:48:53Z",
-        "updated": "2025-03-17T17:52:17Z",
+        "created": "2025-03-28T14:47:30Z",
+        "updated": "2025-04-02T15:20:16Z",
         "updatedBy": "Anonymous",
         "createdBy": "Anonymous",
-        "version": 4,
+        "version": 21,
         "hasAcl": false,
         "isFolder": false,
         "folderId": 0,
@@ -125,7 +125,6 @@
                             "axisColorMode": "text",
                             "axisLabel": "",
                             "axisPlacement": "auto",
-                            "axisSoftMax": 1000,
                             "axisSoftMin": 0,
                             "barAlignment": 0,
                             "barWidthFactor": 0.6,
@@ -139,12 +138,15 @@
                             },
                             "insertNulls": false,
                             "lineInterpolation": "linear",
-                            "lineWidth": 1,
+                            "lineStyle": {
+                                "fill": "solid"
+                            },
+                            "lineWidth": 3,
                             "pointSize": 5,
                             "scaleDistribution": {
                                 "type": "linear"
                             },
-                            "showPoints": "auto",
+                            "showPoints": "never",
                             "spanNulls": false,
                             "stacking": {
                                 "group": "A",
@@ -154,7 +156,9 @@
                                 "mode": "off"
                             }
                         },
+                        "fieldMinMax": false,
                         "mappings": [],
+                        "max": 50,
                         "thresholds": {
                             "mode": "absolute",
                             "steps": [
@@ -167,9 +171,26 @@
                                     "value": 80
                                 }
                             ]
-                        }
+                        },
+                        "unit": "\u00b5s"
                     },
-                    "overrides": []
+                    "overrides": [
+                        {
+                            "matcher": {
+                                "id": "byName",
+                                "options": "FIFO 1 Process"
+                            },
+                            "properties": [
+                                {
+                                    "id": "color",
+                                    "value": {
+                                        "fixedColor": "blue",
+                                        "mode": "fixed"
+                                    }
+                                }
+                            ]
+                        }
+                    ]
                 },
                 "gridPos": {
                     "h": 10,
@@ -177,11 +198,16 @@
                     "x": 0,
                     "y": 2
                 },
-                "id": 8,
+                "id": 10,
                 "options": {
                     "legend": {
-                        "calcs": [],
-                        "displayMode": "list",
+                        "calcs": [
+                            "min",
+                            "mean",
+                            "max",
+                            "lastNotNull"
+                        ],
+                        "displayMode": "table",
                         "placement": "bottom",
                         "showLegend": true
                     },
@@ -193,8 +219,9 @@
                 "pluginVersion": "11.3.1",
                 "targets": [
                     {
-                        "expr": "openmetrics.asil_sysbench.eps",
+                        "expr": "openmetrics.cyclictest_f1.latency",
                         "format": "time_series",
+                        "legendFormat": "FIFO 1 Process",
                         "options": {
                             "rateConversion": true,
                             "timeUtilizationConversion": true
@@ -202,7 +229,7 @@
                         "refId": "A"
                     }
                 ],
-                "title": "ASIL-B Sysbench",
+                "title": "ASIL-B Cyclictest Latency",
                 "type": "timeseries"
             },
             {
@@ -235,12 +262,12 @@
                             },
                             "insertNulls": false,
                             "lineInterpolation": "linear",
-                            "lineWidth": 1,
+                            "lineWidth": 3,
                             "pointSize": 5,
                             "scaleDistribution": {
                                 "type": "linear"
                             },
-                            "showPoints": "auto",
+                            "showPoints": "never",
                             "spanNulls": false,
                             "stacking": {
                                 "group": "A",
@@ -263,9 +290,41 @@
                                     "value": 80
                                 }
                             ]
-                        }
+                        },
+                        "unit": "eps"
                     },
-                    "overrides": []
+                    "overrides": [
+                        {
+                            "matcher": {
+                                "id": "byName",
+                                "options": "ASIL-B CPU Throughput"
+                            },
+                            "properties": [
+                                {
+                                    "id": "color",
+                                    "value": {
+                                        "fixedColor": "green",
+                                        "mode": "fixed"
+                                    }
+                                }
+                            ]
+                        },
+                        {
+                            "matcher": {
+                                "id": "byName",
+                                "options": "QM CPU Throughput"
+                            },
+                            "properties": [
+                                {
+                                    "id": "color",
+                                    "value": {
+                                        "fixedColor": "yellow",
+                                        "mode": "fixed"
+                                    }
+                                }
+                            ]
+                        }
+                    ]
                 },
                 "gridPos": {
                     "h": 10,
@@ -273,11 +332,16 @@
                     "x": 0,
                     "y": 12
                 },
-                "id": 9,
+                "id": 8,
                 "options": {
                     "legend": {
-                        "calcs": [],
-                        "displayMode": "list",
+                        "calcs": [
+                            "min",
+                            "mean",
+                            "max",
+                            "lastNotNull"
+                        ],
+                        "displayMode": "table",
                         "placement": "bottom",
                         "showLegend": true
                     },
@@ -289,16 +353,27 @@
                 "pluginVersion": "11.3.1",
                 "targets": [
                     {
-                        "expr": "openmetrics.qm_sysbench.eps",
+                        "expr": "openmetrics.asil_sysbench.eps",
                         "format": "time_series",
+                        "legendFormat": "ASIL-B CPU Throughput",
                         "options": {
                             "rateConversion": true,
                             "timeUtilizationConversion": true
                         },
                         "refId": "A"
+                    },
+                    {
+                        "expr": "openmetrics.qm_sysbench.eps",
+                        "format": "time_series",
+                        "legendFormat": "QM CPU Throughput",
+                        "options": {
+                            "rateConversion": true,
+                            "timeUtilizationConversion": true
+                        },
+                        "refId": "B"
                     }
                 ],
-                "title": "QM Sysbench",
+                "title": "Sysbench CPU Throughput",
                 "type": "timeseries"
             },
             {
@@ -349,7 +424,7 @@
                         "showLegend": true
                     },
                     "tooltipOptions": {
-                        "mode": "single"
+                        "mode": "multi"
                     },
                     "troubleshooting": {
                         "children": [
@@ -876,7 +951,7 @@
         "timezone": "browser",
         "title": "PCP Vector Checklist",
         "uid": "pcp-vector-checklist",
-        "version": 4,
+        "version": 21,
         "weekStart": ""
     }
 }

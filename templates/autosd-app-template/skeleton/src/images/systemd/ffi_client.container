@@ -8,9 +8,5 @@ ContainerName=ffi_client
 Image=localhost/ffi_client:latest
 
 [Service]
-MemoryMax=30%
+MemoryMax=50%
 Restart=always
-
-[Install]
-WantedBy=multi-user.target
-

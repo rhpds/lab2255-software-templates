@@ -7,6 +7,7 @@ metadata:
   tags:
     - automotive
     - autosd
+    - jumpstarter
 spec:
   owner: automotive
   type: service

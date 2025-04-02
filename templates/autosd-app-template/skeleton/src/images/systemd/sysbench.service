@@ -2,9 +2,8 @@
 description=Run sysbench load
 
 [Service]
-ExecStartPre=-/bin/bash -c "echo 'eps 0' > /root/pmdas_openmetrics.sysbench"
 ExecStart=/bin/bash -c "/usr/bin/run_sysbench.sh"
-ExecStopPost=-/bin/bash -c "echo 'eps 0' > /root/pmdas_openmetrics.sysbench"
+KillSignal=SIGINT
 Type=simple
 
 [Install]
