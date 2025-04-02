@@ -27,7 +27,7 @@ spec:
           type: string
           default: Demonstrates how AutoSD effectively constrains the memory usage in the QM partition.
           description: Help others understand what this build is for.
-          
+
     - title: Source Code Repository and Container Registry Information
       required:
         - repo
@@ -67,14 +67,14 @@ spec:
         guid:
           title: Cluster GUID
           type: string
-          description: Unique identifier of the cluster
+          description: "Unique identifier of the cluster. GUID = 6xw6w in https://..cluster-6xw6w.6xw6w.sandbox4358.opentlc.com. See the URL above !"
           maxLength: 5
         base_domain:
           title: Cluster Domain
           type: string
-          default: sandbox1315.opentlc.com
-          description: The base domain the cluster is running in.
-          
+          default: sandbox4358.opentlc.com
+          description: The base domain the cluster is running in. See the URL above !
+
   steps:
     - id: template
       name: Fetch Skeleton + Template

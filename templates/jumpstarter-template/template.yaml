@@ -27,76 +27,53 @@ spec:
           type: string
           description: Help others understand what this project is for.
           default: Jumpstarter Development Sample Project
-    
-    - title: Provide Image Registry Information
-      required:
-        - image_registry
-      properties:
-        image_registry:
-          title: Image Registry
-          type: string
-          enum:
-            - Openshift
-            - Quay
-      dependencies:
-        image_registry:
-          oneOf:
-            - properties:
-                image_registry:
-                  enum:
-                    - Openshift
-                image_host:
-                  title: Image Host
-                  type: string
-                  description: Host for storing image
-                  default: image-registry.openshift-image-registry.svc:5000
-                image_tag:
-                  title: Image Tag
-                  default: latest
-                  type: string
-                  description: Build Image tag
-            - properties:
-                image_registry:
-                  enum:
-                    - Quay
-                image_host:
-                  title: Image Host
-                  type: string
-                  description: Host for storing image
-                  default: quay-lptwk.apps.cluster-lptwk.lptwk.sandbox1315.opentlc.com
-                image_organization:
-                  title: Organization
-                  type: string
-                  description: Name of the Quay Organization
-                  default: quayadmin
-                image_tag:
-                  title: Image Tag
-                  default: latest
-                  type: string
-                  description: Build Image tag
-    
-    - title: Application Repository Information
+
+    - title: Source Code Repository and Container Registry Information
       required:
         - repo
+        - registry
       properties:
         repo:
           title: Repository Location
           type: object
           properties:
-            host:
-              title: Repo Host
-              type: string
-              description: Your Git Host
-              default: gitlab-gitlab.apps.cluster-lptwk.lptwk.sandbox1315.opentlc.com
-              enum:
-                - gitlab-gitlab.apps.cluster-lptwk.lptwk.sandbox1315.opentlc.com
             owner:
               title: Repo Owner
               type: string
-              description: Your SCM host organization/group
               default: development
+              description: Your SCM host organization/group
               enum:
                 - development
+        registry:
+          title: Container Registry
+          type: object
+          properties:
+            organization:
+              title: Organization
+              type: string
+              default: quayadmin
+              description: Name of the Registry Organization
+            image_tag:
+              title: Image Tag
+              type: string
+              default: latest
+              description: Build Image tag
+
+    - title: Provide Cluster Information
+      required:
+        - guid
+        - base_domain
+      properties:
+        guid:
+          title: Cluster GUID
+          type: string
+          description: "Unique identifier of the cluster. GUID = 6xw6w in https://..cluster-6xw6w.6xw6w.sandbox4358.opentlc.com. See the URL above !"
+          maxLength: 5
+        base_domain:
+          title: Cluster Domain
+          type: string
+          default: sandbox4358.opentlc.com
+          description: The base domain the cluster is running in. See the URL above !
 
   steps:
     - id: template
@@ -111,16 +88,17 @@ spec:
           description: ${{ parameters.description }}
           namespace: ${{ parameters.component_id }}-build
           owner: ${{ user.entity.metadata.name }}
-          cluster: .apps.cluster-lptwk.lptwk.sandbox1315.opentlc.com
-          host: ${{ parameters.repo.host }}
+          cluster: .apps.cluster-${{ parameters.guid }}.${{ parameters.guid }}.${{ parameters.base_domain }}
+          host: gitlab-gitlab.apps.cluster-${{ parameters.guid }}.${{ parameters.guid }}.${{ parameters.base_domain }}
           destination: ${{ parameters.repo.owner }}/${{ parameters.component_id }}
-          registry_destination: ${{ parameters.image_organization}}/${{ parameters.component_id }}
+          registry_host: quay-${{ parameters.guid }}.apps.cluster-${{ parameters.guid }}.${{ parameters.guid }}.${{ parameters.base_domain }}
+          registry_destination: ${{ parameters.registry.organization}}/${{ parameters.component_id }}
 
     - id: publish
       name: Publish
       action: publish:gitlab
       input:
-        repoUrl: "${{ parameters.repo.host }}?owner=${{ parameters.repo.owner }}&repo=${{parameters.component_id}}"
+        repoUrl: "gitlab-gitlab.apps.cluster-${{ parameters.guid }}.${{ parameters.guid }}.${{ parameters.base_domain }}?owner=${{ parameters.repo.owner }}&repo=${{parameters.component_id}}"
         title: code resources for ${{ parameters.component_id }}
         defaultBranch: main
         repoVisibility: public
@@ -141,19 +119,19 @@ spec:
         values:
           component_id: ${{ parameters.component_id }}
           description: ${{ parameters.description }}
-          destination: https://${{ parameters.repo.host }}/${{ parameters.repo.owner }}/${{parameters.component_id}}-gitops.git
-          source_repository: https://${{ parameters.repo.host }}/${{ parameters.repo.owner }}/${{parameters.component_id}}.git
+          destination: https://gitlab-gitlab.apps.cluster-${{ parameters.guid }}.${{ parameters.guid }}.${{ parameters.base_domain }}/${{ parameters.repo.owner }}/${{parameters.component_id}}-gitops.git
+          source_repository: https://gitlab-gitlab.apps.cluster-${{ parameters.guid }}.${{ parameters.guid }}.${{ parameters.base_domain }}/${{ parameters.repo.owner }}/${{parameters.component_id}}.git
           repository_name: ${{parameters.component_id}}
           git_owner: ${{ parameters.repo.owner }}
-          cluster: .apps.cluster-lptwk.lptwk.sandbox1315.opentlc.com
+          cluster: .apps.cluster-${{ parameters.guid }}.${{ parameters.guid }}.${{ parameters.base_domain }}
           namespace: ${{ parameters.component_id }}-dev
-          image_registry: ${{ parameters.image_registry }}
-          registry_host: ${{ parameters.image_host }}
-          registry_organization: ${{ parameters.image_organization }}
+          image_registry: "Quay"
+          registry_host: quay-${{ parameters.guid }}.apps.cluster-${{ parameters.guid }}.${{ parameters.guid }}.${{ parameters.base_domain }}
+          registry_organization: ${{ parameters.registry.organization }}
           image_name: ${{ parameters.component_id }}
-          image_tag: ${{ parameters.image_tag }}
-          repository_host: ${{ parameters.repo.host }}
-          deployment_name: jumpstarter-template
+          image_tag: ${{ parameters.registry.image_tag }}
+          repository_host: gitlab-gitlab.apps.cluster-${{ parameters.guid }}.${{ parameters.guid }}.${{ parameters.base_domain }}
+          deployment_name: ${{ parameters.component_id }}
           user: ${{ user.entity.metadata.name }}
         targetPath: ./tenant-gitops
 
@@ -161,7 +139,7 @@ spec:
       name: Publishing to Resource Repository
       action: publish:gitlab
       input:
-        repoUrl: "${{ parameters.repo.host }}?owner=${{ parameters.repo.owner }}&repo=${{parameters.component_id}}-gitops"
+        repoUrl: "gitlab-gitlab.apps.cluster-${{ parameters.guid }}.${{ parameters.guid }}.${{ parameters.base_domain }}?owner=${{ parameters.repo.owner }}&repo=${{parameters.component_id}}-gitops"
         title: gitops resources for ${{ parameters.component_id }}
         description: gitops resources for ${{ parameters.component_id }}
         sourcePath: ./tenant-gitops
@@ -175,7 +153,7 @@ spec:
         appName: ${{ parameters.component_id }}-bootstrap
         argoInstance: main
         namespace: janus-argocd
-        repoUrl: https://${{ parameters.repo.host }}/${{ parameters.repo.owner }}/${{ parameters.component_id }}-gitops.git
+        repoUrl: https://gitlab-gitlab.apps.cluster-${{ parameters.guid }}.${{ parameters.guid }}.${{ parameters.base_domain }}/${{ parameters.repo.owner }}/${{ parameters.component_id }}-gitops.git
         path: "argocd/"
 
   output:
