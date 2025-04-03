@@ -1,0 +1,96 @@
+kind: ClusterTask
+apiVersion: tekton.dev/v1beta1
+metadata:
+  name: aib-builder-task
+spec:
+  params:
+    # job parameters
+    - name: job_id
+      description: "the reference used to track the job and access its assets"
+      type: string
+      default: ""
+    - name: component_id
+      description: "the conponent_id the job belongs to"
+      type: string
+      default: ""
+    # repo parameters
+    - name: source-repo
+      description: "source repo that contains the application code"
+      type: string
+      default: ""
+    - name: source-branch
+      description: s"ource branch to build from"
+      type: string
+      default: ""
+    - name: tag
+      type: string
+      default: ""
+    # aib parameters
+    - name: aib-working-dir
+      description: "aib-working-dir"
+      type: string
+      default: "/home/workspace/builder"
+    - name: aib-container-image
+      description: "aib container"
+      type: string
+      default: "quay.io/centos-sig-automotive/automotive-osbuild:latest"
+    # secrets
+    - name: aib-secrets-ref
+      description: "Secret with the user, password, and host used to access the AIB host"
+      type: string
+      default: "aib-credentials"
+    # ANSIBLE configuration
+    - name: ansible-playbook
+      description: "Ansible playbook to run"
+      type: string
+      default: "aib-builder.yaml"
+    - name: ansible-playbook-location
+      description: "Location of the Ansible playbooks, relative to the source directory"
+      type: string
+      default: "scripts/ansible"
+
+  steps:
+    - name: aib-build
+      image: quay.io/agnosticd/ee-multicloud:latest # TODO: replace with own container
+      env:
+        - name: AIB_USER
+          valueFrom:
+            secretKeyRef:
+              key: user
+              name: $(params.aib-secrets-ref)
+        - name: AIB_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              key: password
+              name: $(params.aib-secrets-ref)
+        - name: AIB_HOST
+          valueFrom:
+            secretKeyRef:
+              key: host
+              name: $(params.aib-secrets-ref)
+      script: |
+        #!/usr/bin/env bash
+
+        set -eux
+
+        # playbook parameters
+        export JOB_ID="$(params.job_id)"
+        export COMPONENT_ID="$(params.component_id)"
+
+        export SOURCE_REPO="$(params.source-repo)"
+        export SOURCE_BRANCH="$(params.source-branch)"
+        export SOURCE_TAG="$(params.tag)"
+
+        export AIB_WORKING_DIR="$(params.aib-working-dir)"
+        export AIB_CONTAINER_IMAGE="$(params.aib-container-image)"
+
+        # ansible stuff
+        export ANSIBLE_HOST_KEY_CHECKING=False
+
+        # run the playbook
+        export PATH_TO_PLAYBOOK="/workspace/source/$(params.ansible-playbook-location)/$(params.ansible-playbook)"
+
+        ansible-playbook $PATH_TO_PLAYBOOK -i $AIB_HOST, -e "ansible_user=$AIB_USER" -e "ansible_password=$AIB_PASSWORD"
+
+  workspaces:
+    - name: source

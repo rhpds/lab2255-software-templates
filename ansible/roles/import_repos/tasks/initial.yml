@@ -1,0 +1,57 @@
+# Implement your initial tasks here
+# -------------------------------------------------
+
+- name: gather facts
+  delegate_to: localhost
+  block:
+    - name: determine cluster base domain
+      k8s_info:
+        api_version: config.openshift.io/v1
+        kind: DNS
+        name: cluster
+      register: r_dns_config
+      failed_when: r_dns_config.resources | length < 1
+
+    - name: register cluster base domain
+      set_fact:
+        cluster_base_domain: "{{ r_dns_config.resources[0].spec.baseDomain }}"
+
+    - name: determine cluster apps domain
+      k8s_info:
+        api_version: config.openshift.io/v1
+        kind: Ingress
+        name: cluster
+      register: r_ingress_config
+      failed_when: r_ingress_config.resources | length < 1
+
+    - name: register cluster apps domain
+      set_fact:
+        cluster_apps_domain: "{{ r_ingress_config.resources[0].spec.domain }}"
+
+    - name: get gitlab host
+      ansible.builtin.set_fact:
+        gitlab_host: "gitlab-{{ gitlab_namespace }}.{{ cluster_apps_domain }}"
+
+    - name: retrieve gitlab private token
+      kubernetes.core.k8s_info:
+        api_version: v1
+        kind: Secret
+        name: root-user-personal-token
+        namespace: "{{ gitlab_namespace }}"
+      register: r_root_token
+      retries: 120
+      delay: 10
+      until:
+        - r_root_token is defined
+        - r_root_token.resources is defined
+        - r_root_token.resources | length > 0
+        - r_root_token.resources[0] is defined
+        - r_root_token.resources[0].data is defined
+        - r_root_token.resources[0].data.token is defined
+        - r_root_token.resources[0].data.token | length > 0
+
+    - name: register gitlab token
+      ansible.builtin.set_fact:
+        gitlab_token: "{{ r_root_token.resources[0].data.token | b64decode }}"
+
+    

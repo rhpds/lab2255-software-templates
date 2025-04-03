@@ -1,0 +1,20 @@
+- name: Refresh the code templates from upstream
+  hosts: localhost
+  vars:
+    # set the following to control the install/uninstall process
+    silent: false
+    become_override: false
+  
+  tasks:
+
+    - name: uninstall the code templates
+      vars:
+        ACTION: "UNINSTALL" # INSTALL, UNINSTALL, UPDATE
+      include_role:
+        name: roles/import_repos
+
+    - name: import the code templates
+      vars:
+        ACTION: "INSTALL" # INSTALL, UNINSTALL, UPDATE
+      include_role:
+        name: roles/import_repos

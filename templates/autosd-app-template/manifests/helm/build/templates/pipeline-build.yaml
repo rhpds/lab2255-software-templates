@@ -1,0 +1,121 @@
+---
+apiVersion: tekton.dev/v1beta1
+kind: Pipeline
+metadata:
+  name: {{ .Values.app.name }}-build
+  labels:
+    type: pipeline
+    backstage.io/kubernetes-id: {{ .Values.app.name }}
+spec:
+  params:
+    - name: source-repo
+      description: source repo that contains the application code
+      type: string
+      default: {{ .Values.git.repo }}
+    - name: source-branch
+      description: source branch to build from
+      default: {{ .Values.git.branch }}
+      type: string
+    - name: output-image
+      description: reference of the image that will get created
+      default: {{ include "image.dev-url" . }}
+      type: string
+    - description: Component id
+      name: component-id
+      type: string
+  tasks:
+    - name: git-clone
+      params:
+        - name: url
+          value: $(params.source-repo)
+        - name: revision
+          value: $(params.source-branch)
+      taskRef:
+        kind: ClusterTask
+        name: git-clone
+      workspaces:
+        - name: output
+          workspace: source-folder
+
+    - name: build-server
+      params:
+        - name: IMAGE
+          value: $(params.output-image):$(params.source-branch)-server
+        - name: CONTEXT
+          value: ./src/containers/ffi_server
+        - name: DOCKERFILE
+          value: ./Containerfile
+      runAfter:
+        - git-clone
+      taskRef:
+        kind: ClusterTask
+        name: buildah
+      workspaces:
+        - name: source
+          workspace: source-folder
+        - name: dockerconfig
+          workspace: docker-config
+
+    - name: tag-server
+      params:
+        - name: source-image-tag
+          value: $(params.output-image):$(params.source-branch)-server
+        - name: target-image-tag
+          value: $(params.output-image):latest-server
+      runAfter:
+        - build-server
+      taskRef:
+        kind: ClusterTask
+        name: tag-image
+      workspaces:
+        - name: dockerconfig
+          workspace: docker-config
+        
+    - name: build-client
+      params:
+        - name: IMAGE
+          value: $(params.output-image):$(params.source-branch)-client
+        - name: CONTEXT
+          value: ./src/containers/ffi_client
+        - name: DOCKERFILE
+          value: ./Containerfile
+      runAfter:
+        - git-clone
+      taskRef:
+        kind: ClusterTask
+        name: buildah
+      workspaces:
+        - name: source
+          workspace: source-folder
+        - name: dockerconfig
+          workspace: docker-config
+
+    - name: tag-client
+      params:
+        - name: source-image-tag
+          value: $(params.output-image):$(params.source-branch)-client
+        - name: target-image-tag
+          value: $(params.output-image):latest-client
+      runAfter:
+        - build-client
+      taskRef:
+        kind: ClusterTask
+        name: tag-image
+      workspaces:
+        - name: dockerconfig
+          workspace: docker-config
+        
+    - name: deploy
+      params:
+        - name: COMPONENT_ID
+          value: $(params.component-id)
+      runAfter:
+        - tag-server
+        - tag-client
+      taskRef:
+        kind: Task
+        name: resync
+
+  workspaces:
+    - name: source-folder
+    - name: docker-config

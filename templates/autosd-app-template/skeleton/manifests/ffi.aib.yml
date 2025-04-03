@@ -1,0 +1,172 @@
+name: ffi-demo
+
+image:
+  hostname: localhost
+  selinux_mode: enforcing
+
+content:
+  rpms:
+    - bcc-tools
+    - bpftrace
+    - kmod
+    - openssh-server
+    - pcp-pmda-bcc
+    - pcp-pmda-bpftrace
+    - pcp-pmda-podman
+    - pcp-pmda-openmetrics
+    - pcp-system-tools
+    - pcp-zeroconf
+    - podman
+    - procps
+    - redis
+    - sudo
+    - tar
+    - bluechi-controller
+    - bluechi-agent
+    - rtla
+    - vim
+    - dnf
+
+  container_images:
+    - source: ${{values.registry_host}}/${{values.registry_destination}}
+      tag: latest-server
+      name: localhost/ffi_server
+      #containers-transport: containers-storage
+    #- source: localhost/sysbench
+    #  tag: latest
+    #  name: localhost/sysbench
+    #  containers-transport: containers-storage
+#
+#  make_dirs:
+#    - path: /etc/containers/systemd/qm.container.d
+#      mode: 0755
+#      parents: true
+#      exist_ok: true
+#    - path: /etc/sysconfig
+#      mode: 0755
+#      parents: true
+#      exist_ok: true
+#    - path: /etc/systemd/system
+#      mode: 0755
+#      parents: true
+#      exist_ok: true
+#    - path: /var/lib/pcp/pmdas/bcc
+#      mode: 0755
+#      parents: true
+#      exist_ok: true
+#    - path: /var/lib/pcp/pmdas/bpftrace
+#      mode: 0755
+#      parents: true
+#      exist_ok: true
+#    - path: /var/lib/pcp/pmdas/podman
+#      mode: 0755
+#      parents: true
+#      exist_ok: true
+#    - path: /var/lib/pcp/pmdas/openmetrics/config.d
+#      mode: 0644
+#      parents: true
+#      exist_ok: true
+#
+#  add_files:
+#    - path: /etc/systemd/system/ffi_server.socket
+#      source_path: systemd/ffi_server.socket
+#    - path: /etc/containers/systemd/ffi_server.container
+#      source_path: systemd/ffi_server.container
+#    - path: /etc/containers/systemd/qm.container.d/10-ipc-demo.conf
+#      source_path: systemd/10-ipc-demo.conf
+#    - path: /etc/sysconfig/pmcd
+#      source_path: sysconfig/pmcd
+#    - path: /etc/systemd/system/sysbench.service
+#      source_path: systemd/sysbench.service
+#    - path: /usr/bin/run_sysbench.sh
+#      source_path: files/run_sysbench.sh
+#    - path: /opt/pmdas_openmetrics.sysbench
+#      source_path: files/pmdas_openmetrics.sysbench
+#    - path: /var/lib/pcp/pmdas/openmetrics/config.d/asil_sysbench.url
+#      source_path: pmdas/asil_sysbench.url
+#    - path: /var/lib/pcp/pmdas/openmetrics/config.d/qm_sysbench.url
+#      source_path: pmdas/qm_sysbench.url
+#    - path: /var/lib/pcp/pmdas/bpftrace/.NeedInstall
+#      source_path: pmdas/NeedInstall
+#    - path: /var/lib/pcp/pmdas/podman/.NeedInstall
+#      source_path: pmdas/NeedInstall
+#    - path: /var/lib/pcp/pmdas/bcc/.NeedInstall
+#      source_path: pmdas/NeedInstall
+#    - path: /var/lib/pcp/pmdas/openmetrics/.NeedInstall
+#      source_path: pmdas/NeedInstall
+#
+#  chmod_files:
+#    - path: /usr/bin/run_sysbench.sh
+#      mode: "0755"
+#    - path: /opt/pmdas_openmetrics.sysbench
+#      mode: "0644"
+#
+#  systemd:
+#    enabled_services:
+#      - ffi_server.socket
+#      - pmproxy.service
+#      - redis.service
+#
+#qm:
+#  memory_limit:
+#    # Do not allow QM to use more than 50% of memory before OOM kicks in
+#    max: 50%
+#
+#  content:
+#    rpms:
+#      - bluechi-agent
+#
+#    container_images:
+#      - source: localhost/ffi_client
+#        tag: latest
+#        name: localhost/ffi_client
+#        containers-transport: containers-storage
+#      - source: localhost/sysbench
+#        tag: latest
+#        name: localhost/sysbench
+#        containers-transport: containers-storage
+#
+#    make_dirs:
+#      - path: /etc/containers/systemd
+#        mode: 0755
+#        parents: true
+#        exist_ok: true
+#
+#    add_files:
+#      - path: /etc/containers/systemd/ffi_client.container
+#        source_path: systemd/ffi_client.container
+#      - path: /etc/systemd/system/sysbench.service
+#        source_path: systemd/sysbench.service
+#      - path: /usr/bin/run_sysbench.sh
+#        source_path: files/run_sysbench.sh
+#      - path: /opt/pmdas_openmetrics.sysbench
+#        source_path: files/pmdas_openmetrics.sysbench
+#
+#    chmod_files:
+#      - path: /usr/bin/run_sysbench.sh
+#        mode: "0755"
+#      - path: /opt/pmdas_openmetrics.sysbench
+#        mode: "0644"
+#
+#    # systemd:
+
+auth:
+  groups:
+    guest:
+      gid: 2000
+
+  users:
+    guest:
+      # "password"
+      password: $6$xoLqEUz0cGGJRx01$H3H/bFm0myJPULNMtbSsOFd/2BnHqHkMD92Sfxd.EKM9hXTWSmELG8cf205l6dktomuTcgKGGtGDgtvHVXSWU.
+      gid: 2000
+      uid: 2000
+    admin:
+      groups:
+        - wheel
+      home: /home/admin
+      # "password"
+      password: $6$xoLqEUz0cGGJRx01$H3H/bFm0myJPULNMtbSsOFd/2BnHqHkMD92Sfxd.EKM9hXTWSmELG8cf205l6dktomuTcgKGGtGDgtvHVXSWU.
+
+  # "password"
+  root_password: $6$xoLqEUz0cGGJRx01$H3H/bFm0myJPULNMtbSsOFd/2BnHqHkMD92Sfxd.EKM9hXTWSmELG8cf205l6dktomuTcgKGGtGDgtvHVXSWU.

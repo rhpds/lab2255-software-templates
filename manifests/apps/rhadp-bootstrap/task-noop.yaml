@@ -1,0 +1,26 @@
+kind: ClusterTask
+apiVersion: tekton.dev/v1beta1
+metadata:
+  name: noop
+spec:
+  description: Nothing to do
+  params:
+    - name: EXTRA_CMD
+      type: string
+      default: ""
+  steps:
+    - name: noop
+      image: registry.redhat.io/ubi9/python-312
+
+      script: |
+        #!/usr/bin/env bash
+
+        pwd
+
+        ls -la
+
+        $(params.EXTRA_CMD)
+
+      workingDir: $(workspaces.source.path)
+  workspaces:
+    - name: source

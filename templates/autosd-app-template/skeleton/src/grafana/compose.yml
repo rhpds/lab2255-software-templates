@@ -1,0 +1,17 @@
+services:
+  grafana:
+    container_name: grafana
+    deploy:
+      resources:
+        limits:
+          memory: 100M
+    environment:
+    - GF_INSTALL_PLUGINS=https://github.com/performancecopilot/grafana-pcp/releases/download/v5.2.1/performancecopilot-pcp-app-5.2.1.zip;grafana-pcp,grafana-opensearch-datasource
+    image: grafana/grafana:11.3.1
+    network_mode: host
+    ports:
+    - 3000:3000
+    restart: unless-stopped
+    volumes:
+    - ./files/grafana.ini:/etc/grafana/grafana.ini:Z
+    - ./files/provisioning/:/etc/grafana/provisioning/:Z

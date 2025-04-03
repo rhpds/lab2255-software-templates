@@ -1,0 +1,957 @@
+{
+    "meta": {
+        "type": "db",
+        "canSave": true,
+        "canEdit": true,
+        "canAdmin": true,
+        "canStar": true,
+        "canDelete": true,
+        "slug": "pcp-vector-checklist",
+        "url": "/d/pcp-vector-checklist/pcp-vector-checklist",
+        "expires": "0001-01-01T00:00:00Z",
+        "created": "2025-03-28T14:47:30Z",
+        "updated": "2025-04-02T15:20:16Z",
+        "updatedBy": "Anonymous",
+        "createdBy": "Anonymous",
+        "version": 21,
+        "hasAcl": false,
+        "isFolder": false,
+        "folderId": 0,
+        "folderUid": "",
+        "folderTitle": "General",
+        "folderUrl": "",
+        "provisioned": false,
+        "provisionedExternalId": "",
+        "annotationsPermissions": {
+            "dashboard": {
+                "canAdd": true,
+                "canEdit": true,
+                "canDelete": true
+            },
+            "organization": {
+                "canAdd": true,
+                "canEdit": true,
+                "canDelete": true
+            }
+        }
+    },
+    "dashboard": {
+        "annotations": {
+            "list": [
+                {
+                    "builtIn": 1,
+                    "datasource": {
+                        "type": "grafana",
+                        "uid": "-- Grafana --"
+                    },
+                    "enable": true,
+                    "hide": true,
+                    "iconColor": "rgba(0, 211, 255, 1)",
+                    "name": "Annotations & Alerts",
+                    "type": "dashboard"
+                }
+            ]
+        },
+        "editable": true,
+        "fiscalYearStartMonth": 0,
+        "graphTooltip": 0,
+        "id": 3,
+        "links": [],
+        "panels": [
+            {
+                "fieldConfig": {
+                    "defaults": {},
+                    "overrides": []
+                },
+                "gridPos": {
+                    "h": 2,
+                    "w": 24,
+                    "x": 0,
+                    "y": 0
+                },
+                "id": 2,
+                "options": {
+                    "items": [
+                        [
+                            {
+                                "active": true,
+                                "current": true,
+                                "name": "Overview",
+                                "title": "PCP Vector Checklist",
+                                "uid": "pcp-vector-checklist"
+                            }
+                        ],
+                        [
+                            {
+                                "name": "CPU",
+                                "title": "PCP Vector Checklist: CPU",
+                                "uid": "pcp-vector-checklist-cpu"
+                            },
+                            {
+                                "name": "Memory",
+                                "title": "PCP Vector Checklist: Memory",
+                                "uid": "pcp-vector-checklist-memory"
+                            },
+                            {
+                                "name": "Storage",
+                                "title": "PCP Vector Checklist: Storage",
+                                "uid": "pcp-vector-checklist-storage"
+                            },
+                            {
+                                "name": "Network",
+                                "title": "PCP Vector Checklist: Network",
+                                "uid": "pcp-vector-checklist-network"
+                            }
+                        ]
+                    ]
+                },
+                "pluginVersion": "5.2.1",
+                "title": "",
+                "type": "performancecopilot-breadcrumbs-panel"
+            },
+            {
+                "datasource": {
+                    "type": "performancecopilot-vector-datasource",
+                    "uid": "${datasource}"
+                },
+                "fieldConfig": {
+                    "defaults": {
+                        "color": {
+                            "mode": "palette-classic"
+                        },
+                        "custom": {
+                            "axisBorderShow": false,
+                            "axisCenteredZero": false,
+                            "axisColorMode": "text",
+                            "axisLabel": "",
+                            "axisPlacement": "auto",
+                            "axisSoftMin": 0,
+                            "barAlignment": 0,
+                            "barWidthFactor": 0.6,
+                            "drawStyle": "line",
+                            "fillOpacity": 0,
+                            "gradientMode": "none",
+                            "hideFrom": {
+                                "legend": false,
+                                "tooltip": false,
+                                "viz": false
+                            },
+                            "insertNulls": false,
+                            "lineInterpolation": "linear",
+                            "lineStyle": {
+                                "fill": "solid"
+                            },
+                            "lineWidth": 3,
+                            "pointSize": 5,
+                            "scaleDistribution": {
+                                "type": "linear"
+                            },
+                            "showPoints": "never",
+                            "spanNulls": false,
+                            "stacking": {
+                                "group": "A",
+                                "mode": "none"
+                            },
+                            "thresholdsStyle": {
+                                "mode": "off"
+                            }
+                        },
+                        "fieldMinMax": false,
+                        "mappings": [],
+                        "max": 50,
+                        "thresholds": {
+                            "mode": "absolute",
+                            "steps": [
+                                {
+                                    "color": "green",
+                                    "value": null
+                                },
+                                {
+                                    "color": "red",
+                                    "value": 80
+                                }
+                            ]
+                        },
+                        "unit": "\u00b5s"
+                    },
+                    "overrides": [
+                        {
+                            "matcher": {
+                                "id": "byName",
+                                "options": "FIFO 1 Process"
+                            },
+                            "properties": [
+                                {
+                                    "id": "color",
+                                    "value": {
+                                        "fixedColor": "blue",
+                                        "mode": "fixed"
+                                    }
+                                }
+                            ]
+                        }
+                    ]
+                },
+                "gridPos": {
+                    "h": 10,
+                    "w": 24,
+                    "x": 0,
+                    "y": 2
+                },
+                "id": 10,
+                "options": {
+                    "legend": {
+                        "calcs": [
+                            "min",
+                            "mean",
+                            "max",
+                            "lastNotNull"
+                        ],
+                        "displayMode": "table",
+                        "placement": "bottom",
+                        "showLegend": true
+                    },
+                    "tooltip": {
+                        "mode": "single",
+                        "sort": "none"
+                    }
+                },
+                "pluginVersion": "11.3.1",
+                "targets": [
+                    {
+                        "expr": "openmetrics.cyclictest_f1.latency",
+                        "format": "time_series",
+                        "legendFormat": "FIFO 1 Process",
+                        "options": {
+                            "rateConversion": true,
+                            "timeUtilizationConversion": true
+                        },
+                        "refId": "A"
+                    }
+                ],
+                "title": "ASIL-B Cyclictest Latency",
+                "type": "timeseries"
+            },
+            {
+                "datasource": {
+                    "type": "performancecopilot-vector-datasource",
+                    "uid": "${datasource}"
+                },
+                "fieldConfig": {
+                    "defaults": {
+                        "color": {
+                            "mode": "palette-classic"
+                        },
+                        "custom": {
+                            "axisBorderShow": false,
+                            "axisCenteredZero": false,
+                            "axisColorMode": "text",
+                            "axisLabel": "",
+                            "axisPlacement": "auto",
+                            "axisSoftMax": 1000,
+                            "axisSoftMin": 0,
+                            "barAlignment": 0,
+                            "barWidthFactor": 0.6,
+                            "drawStyle": "line",
+                            "fillOpacity": 0,
+                            "gradientMode": "none",
+                            "hideFrom": {
+                                "legend": false,
+                                "tooltip": false,
+                                "viz": false
+                            },
+                            "insertNulls": false,
+                            "lineInterpolation": "linear",
+                            "lineWidth": 3,
+                            "pointSize": 5,
+                            "scaleDistribution": {
+                                "type": "linear"
+                            },
+                            "showPoints": "never",
+                            "spanNulls": false,
+                            "stacking": {
+                                "group": "A",
+                                "mode": "none"
+                            },
+                            "thresholdsStyle": {
+                                "mode": "off"
+                            }
+                        },
+                        "mappings": [],
+                        "thresholds": {
+                            "mode": "absolute",
+                            "steps": [
+                                {
+                                    "color": "green",
+                                    "value": null
+                                },
+                                {
+                                    "color": "red",
+                                    "value": 80
+                                }
+                            ]
+                        },
+                        "unit": "eps"
+                    },
+                    "overrides": [
+                        {
+                            "matcher": {
+                                "id": "byName",
+                                "options": "ASIL-B CPU Throughput"
+                            },
+                            "properties": [
+                                {
+                                    "id": "color",
+                                    "value": {
+                                        "fixedColor": "green",
+                                        "mode": "fixed"
+                                    }
+                                }
+                            ]
+                        },
+                        {
+                            "matcher": {
+                                "id": "byName",
+                                "options": "QM CPU Throughput"
+                            },
+                            "properties": [
+                                {
+                                    "id": "color",
+                                    "value": {
+                                        "fixedColor": "yellow",
+                                        "mode": "fixed"
+                                    }
+                                }
+                            ]
+                        }
+                    ]
+                },
+                "gridPos": {
+                    "h": 10,
+                    "w": 24,
+                    "x": 0,
+                    "y": 12
+                },
+                "id": 8,
+                "options": {
+                    "legend": {
+                        "calcs": [
+                            "min",
+                            "mean",
+                            "max",
+                            "lastNotNull"
+                        ],
+                        "displayMode": "table",
+                        "placement": "bottom",
+                        "showLegend": true
+                    },
+                    "tooltip": {
+                        "mode": "single",
+                        "sort": "none"
+                    }
+                },
+                "pluginVersion": "11.3.1",
+                "targets": [
+                    {
+                        "expr": "openmetrics.asil_sysbench.eps",
+                        "format": "time_series",
+                        "legendFormat": "ASIL-B CPU Throughput",
+                        "options": {
+                            "rateConversion": true,
+                            "timeUtilizationConversion": true
+                        },
+                        "refId": "A"
+                    },
+                    {
+                        "expr": "openmetrics.qm_sysbench.eps",
+                        "format": "time_series",
+                        "legendFormat": "QM CPU Throughput",
+                        "options": {
+                            "rateConversion": true,
+                            "timeUtilizationConversion": true
+                        },
+                        "refId": "B"
+                    }
+                ],
+                "title": "Sysbench CPU Throughput",
+                "type": "timeseries"
+            },
+            {
+                "datasource": {
+                    "uid": "$datasource"
+                },
+                "fieldConfig": {
+                    "defaults": {
+                        "color": {
+                            "mode": "palette-classic"
+                        },
+                        "custom": {
+                            "fillOpacity": 10,
+                            "pointSize": 5,
+                            "showPoints": "never"
+                        },
+                        "mappings": [],
+                        "max": 1,
+                        "min": 0,
+                        "thresholds": {
+                            "mode": "absolute",
+                            "steps": [
+                                {
+                                    "color": "green",
+                                    "value": null
+                                },
+                                {
+                                    "color": "red",
+                                    "value": 80
+                                }
+                            ]
+                        },
+                        "unit": "percentunit"
+                    },
+                    "overrides": []
+                },
+                "gridPos": {
+                    "h": 10,
+                    "w": 24,
+                    "x": 0,
+                    "y": 22
+                },
+                "id": 3,
+                "options": {
+                    "legend": {
+                        "displayMode": "list",
+                        "placement": "bottom",
+                        "showLegend": true
+                    },
+                    "tooltipOptions": {
+                        "mode": "multi"
+                    },
+                    "troubleshooting": {
+                        "children": [
+                            {
+                                "name": "CPU",
+                                "parents": [
+                                    "pcp-vector-checklist"
+                                ],
+                                "title": "PCP Vector Checklist: CPU",
+                                "uid": "pcp-vector-checklist-cpu"
+                            }
+                        ],
+                        "derivedMetrics": [
+                            {
+                                "expr": "1 - rate(kernel.percpu.cpu.idle)",
+                                "name": "kernel.percpu.cpu.util.all"
+                            }
+                        ],
+                        "metrics": [
+                            {
+                                "helptext": "percpu idle CPU time metric from /proc/stat",
+                                "name": "kernel.percpu.cpu.idle"
+                            }
+                        ],
+                        "name": "CPU",
+                        "parents": [],
+                        "predicate": {
+                            "metric": "kernel.percpu.cpu.util.all",
+                            "operator": ">",
+                            "value": 0.85
+                        },
+                        "urls": [
+                            "https://access.redhat.com/articles/767563#cpu"
+                        ],
+                        "warning": "The speed of the CPU is limiting performance."
+                    }
+                },
+                "pluginVersion": "5.2.1",
+                "targets": [
+                    {
+                        "datasource": {
+                            "uid": "$datasource"
+                        },
+                        "expr": "1 - rate(kernel.percpu.cpu.idle)",
+                        "format": "time_series",
+                        "hostspec": "$hostspec",
+                        "legendFormat": "$instance",
+                        "refId": "A",
+                        "url": "$url"
+                    }
+                ],
+                "title": "CPU Utilization",
+                "type": "performancecopilot-troubleshooting-panel"
+            },
+            {
+                "datasource": {
+                    "uid": "$datasource"
+                },
+                "fieldConfig": {
+                    "defaults": {
+                        "color": {
+                            "mode": "palette-classic"
+                        },
+                        "custom": {
+                            "fillOpacity": 10,
+                            "pointSize": 5,
+                            "showPoints": "never"
+                        },
+                        "mappings": [],
+                        "max": 1,
+                        "min": 0,
+                        "thresholds": {
+                            "mode": "absolute",
+                            "steps": [
+                                {
+                                    "color": "green",
+                                    "value": null
+                                },
+                                {
+                                    "color": "red",
+                                    "value": 80
+                                }
+                            ]
+                        },
+                        "unit": "percentunit"
+                    },
+                    "overrides": []
+                },
+                "gridPos": {
+                    "h": 9,
+                    "w": 24,
+                    "x": 0,
+                    "y": 32
+                },
+                "id": 5,
+                "options": {
+                    "legend": {
+                        "displayMode": "list",
+                        "placement": "bottom",
+                        "showLegend": true
+                    },
+                    "tooltipOptions": {
+                        "mode": "single"
+                    },
+                    "troubleshooting": {
+                        "children": [
+                            {
+                                "name": "Memory",
+                                "parents": [
+                                    "pcp-vector-checklist"
+                                ],
+                                "title": "PCP Vector Checklist: Memory",
+                                "uid": "pcp-vector-checklist-memory"
+                            }
+                        ],
+                        "derivedMetrics": [
+                            {
+                                "expr": "mem.util.available / mem.physmem",
+                                "name": "mem.ratio.available"
+                            }
+                        ],
+                        "description": "When there is little memory available the system will need to free up space when additional memory is requested.  The memory can be freed by removing cached files, flushing files to disk, and paging sections of memory to swap on storage devices.",
+                        "metrics": [
+                            {
+                                "helptext": "available memory from /proc/meminfo",
+                                "name": "mem.util.available"
+                            },
+                            {
+                                "helptext": "total system memory metric reported by /proc/meminfo",
+                                "name": "mem.physmem"
+                            }
+                        ],
+                        "name": "Memory",
+                        "parents": [],
+                        "predicate": {
+                            "metric": "mem.ratio.available",
+                            "operator": "<",
+                            "value": 0.1
+                        },
+                        "urls": [
+                            "https://access.redhat.com/articles/781733"
+                        ],
+                        "warning": "Running low on available memory."
+                    }
+                },
+                "pluginVersion": "5.2.1",
+                "targets": [
+                    {
+                        "datasource": {
+                            "uid": "$datasource"
+                        },
+                        "expr": "mem.util.available / mem.physmem",
+                        "format": "time_series",
+                        "hostspec": "$hostspec",
+                        "legendFormat": "$expr",
+                        "refId": "A",
+                        "url": "$url"
+                    }
+                ],
+                "title": "Memory Utilization",
+                "type": "performancecopilot-troubleshooting-panel"
+            },
+            {
+                "datasource": {
+                    "uid": "$datasource"
+                },
+                "fieldConfig": {
+                    "defaults": {
+                        "color": {
+                            "mode": "palette-classic"
+                        },
+                        "custom": {
+                            "fillOpacity": 10,
+                            "pointSize": 5,
+                            "showPoints": "never"
+                        },
+                        "mappings": [],
+                        "thresholds": {
+                            "mode": "absolute",
+                            "steps": [
+                                {
+                                    "color": "green",
+                                    "value": null
+                                },
+                                {
+                                    "color": "red",
+                                    "value": 80
+                                }
+                            ]
+                        },
+                        "unit": "percentunit"
+                    },
+                    "overrides": []
+                },
+                "gridPos": {
+                    "h": 9,
+                    "w": 12,
+                    "x": 0,
+                    "y": 41
+                },
+                "id": 4,
+                "options": {
+                    "legend": {
+                        "displayMode": "list",
+                        "placement": "bottom",
+                        "showLegend": true
+                    },
+                    "tooltipOptions": {
+                        "mode": "single"
+                    },
+                    "troubleshooting": {
+                        "children": [
+                            {
+                                "name": "Storage",
+                                "parents": [
+                                    "pcp-vector-checklist"
+                                ],
+                                "title": "PCP Vector Checklist: Storage",
+                                "uid": "pcp-vector-checklist-storage"
+                            }
+                        ],
+                        "description": "Storage devices have queues for the IO requests for the device.  When the queue is empty the device is idle.  As the device utilization increases the amount of idle time drops and the avactive time increases. If the utilization is excessive and the device becomes saturated the time required to service IO request can become excessive.",
+                        "metrics": [
+                            {
+                                "helptext": "per-disk count of active time",
+                                "name": "disk.dev.avactive"
+                            }
+                        ],
+                        "name": "Storage",
+                        "parents": [],
+                        "predicate": {
+                            "metric": "disk.dev.avactive",
+                            "operator": ">",
+                            "value": 0.85
+                        },
+                        "urls": [
+                            "https://access.redhat.com/documentation/en-US/Red_Hat_Enterprise_Linux/7/html-single/Performance_Tuning_Guide/index.html#chap-Red_Hat_Enterprise_Linux-Performance_Tuning_Guide-Storage_and_File_Systems"
+                        ],
+                        "warning": "Excessive waiting for storage."
+                    }
+                },
+                "pluginVersion": "5.2.1",
+                "targets": [
+                    {
+                        "datasource": {
+                            "uid": "$datasource"
+                        },
+                        "expr": "disk.dev.avactive",
+                        "format": "time_series",
+                        "hostspec": "$hostspec",
+                        "legendFormat": "$instance",
+                        "options": {
+                            "rateConversion": true,
+                            "timeUtilizationConversion": true
+                        },
+                        "refId": "A",
+                        "url": "$url"
+                    }
+                ],
+                "title": "Storage Utilization",
+                "type": "performancecopilot-troubleshooting-panel"
+            },
+            {
+                "datasource": {
+                    "uid": "$datasource"
+                },
+                "fieldConfig": {
+                    "defaults": {
+                        "color": {
+                            "mode": "palette-classic"
+                        },
+                        "custom": {
+                            "fillOpacity": 10,
+                            "pointSize": 5,
+                            "showPoints": "never"
+                        },
+                        "mappings": [],
+                        "thresholds": {
+                            "mode": "absolute",
+                            "steps": [
+                                {
+                                    "color": "green",
+                                    "value": null
+                                },
+                                {
+                                    "color": "red",
+                                    "value": 80
+                                }
+                            ]
+                        },
+                        "unit": "percentunit"
+                    },
+                    "overrides": []
+                },
+                "gridPos": {
+                    "h": 9,
+                    "w": 12,
+                    "x": 12,
+                    "y": 41
+                },
+                "id": 7,
+                "options": {
+                    "legend": {
+                        "displayMode": "list",
+                        "placement": "bottom",
+                        "showLegend": true
+                    },
+                    "tooltipOptions": {
+                        "mode": "single"
+                    },
+                    "troubleshooting": {
+                        "children": [
+                            {
+                                "name": "Network RX",
+                                "parents": [
+                                    "pcp-vector-checklist-network"
+                                ],
+                                "title": "PCP Vector Checklist: Network RX",
+                                "uid": "pcp-vector-checklist-network-rx"
+                            }
+                        ],
+                        "derivedMetrics": [
+                            {
+                                "expr": "rate(network.interface.in.bytes) / network.interface.baudrate",
+                                "name": "network_rx_bandwidth"
+                            }
+                        ],
+                        "metrics": [
+                            {
+                                "helptext": "network recv read bytes from /proc/net/dev per network interface",
+                                "name": "network.interface.in.bytes"
+                            },
+                            {
+                                "helptext": "interface speed in bytes per second",
+                                "name": "network.interface.baudrate"
+                            }
+                        ],
+                        "name": "Network RX",
+                        "parents": [],
+                        "predicate": {
+                            "metric": "network_rx_bandwidth",
+                            "operator": ">",
+                            "value": 0.85
+                        },
+                        "warning": "Overly high ammount of network traffic received."
+                    }
+                },
+                "pluginVersion": "5.2.1",
+                "targets": [
+                    {
+                        "datasource": {
+                            "uid": "$datasource"
+                        },
+                        "expr": "rate(network.interface.in.bytes) / network.interface.baudrate",
+                        "format": "time_series",
+                        "hostspec": "$hostspec",
+                        "legendFormat": "$instance",
+                        "refId": "A",
+                        "url": "$url"
+                    }
+                ],
+                "title": "Network RX Utilization",
+                "type": "performancecopilot-troubleshooting-panel"
+            },
+            {
+                "datasource": {
+                    "uid": "$datasource"
+                },
+                "fieldConfig": {
+                    "defaults": {
+                        "color": {
+                            "mode": "palette-classic"
+                        },
+                        "custom": {
+                            "fillOpacity": 10,
+                            "pointSize": 5,
+                            "showPoints": "never"
+                        },
+                        "mappings": [],
+                        "thresholds": {
+                            "mode": "absolute",
+                            "steps": [
+                                {
+                                    "color": "green",
+                                    "value": null
+                                },
+                                {
+                                    "color": "red",
+                                    "value": 80
+                                }
+                            ]
+                        },
+                        "unit": "percentunit"
+                    },
+                    "overrides": []
+                },
+                "gridPos": {
+                    "h": 9,
+                    "w": 12,
+                    "x": 0,
+                    "y": 50
+                },
+                "id": 6,
+                "options": {
+                    "legend": {
+                        "displayMode": "list",
+                        "placement": "bottom",
+                        "showLegend": true
+                    },
+                    "tooltipOptions": {
+                        "mode": "single"
+                    },
+                    "troubleshooting": {
+                        "children": [
+                            {
+                                "name": "Network TX",
+                                "parents": [
+                                    "pcp-vector-checklist-network"
+                                ],
+                                "title": "PCP Vector Checklist: Network TX",
+                                "uid": "pcp-vector-checklist-network-tx"
+                            }
+                        ],
+                        "derivedMetrics": [
+                            {
+                                "expr": "rate(network.interface.out.bytes) / network.interface.baudrate",
+                                "name": "network_tx_bandwidth"
+                            }
+                        ],
+                        "metrics": [
+                            {
+                                "helptext": "network send bytes from /proc/net/dev per network interface",
+                                "name": "network.interface.out.bytes"
+                            },
+                            {
+                                "helptext": "interface speed in bytes per second",
+                                "name": "network.interface.baudrate"
+                            }
+                        ],
+                        "name": "Network TX",
+                        "parents": [],
+                        "predicate": {
+                            "metric": "network_tx_bandwidth",
+                            "operator": ">",
+                            "value": 0.85
+                        },
+                        "warning": "Overly high ammount of network traffic sent."
+                    }
+                },
+                "pluginVersion": "5.2.1",
+                "targets": [
+                    {
+                        "datasource": {
+                            "uid": "$datasource"
+                        },
+                        "expr": "rate(network.interface.out.bytes) / network.interface.baudrate",
+                        "format": "time_series",
+                        "hostspec": "$hostspec",
+                        "legendFormat": "$instance",
+                        "refId": "A",
+                        "url": "$url"
+                    }
+                ],
+                "title": "Network TX Utilization",
+                "type": "performancecopilot-troubleshooting-panel"
+            }
+        ],
+        "preload": false,
+        "refresh": "1s",
+        "schemaVersion": 40,
+        "tags": [
+            "pcp-vector",
+            "pcp-checklist"
+        ],
+        "templating": {
+            "list": [
+                {
+                    "current": {
+                        "text": "PCP Vector",
+                        "value": "PCP Vector"
+                    },
+                    "name": "datasource",
+                    "options": [],
+                    "query": "performancecopilot-vector-datasource",
+                    "refresh": 1,
+                    "regex": "",
+                    "type": "datasource"
+                },
+                {
+                    "current": {
+                        "text": "",
+                        "value": ""
+                    },
+                    "description": "overwrite pmproxy URL (example: http://127.0.0.1:44322)",
+                    "label": "URL",
+                    "name": "url",
+                    "query": "",
+                    "type": "textbox"
+                },
+                {
+                    "current": {
+                        "text": "",
+                        "value": ""
+                    },
+                    "description": "overwrite PCP host specification (example: pcp://127.0.0.1:44321)",
+                    "name": "hostspec",
+                    "query": "",
+                    "type": "textbox"
+                }
+            ]
+        },
+        "time": {
+            "from": "now-5m",
+            "to": "now"
+        },
+        "timepicker": {
+            "refresh_intervals": [
+                "1s",
+                "2s",
+                "5s",
+                "10s"
+            ]
+        },
+        "timezone": "browser",
+        "title": "PCP Vector Checklist",
+        "uid": "pcp-vector-checklist",
+        "version": 21,
+        "weekStart": ""
+    }
+}

@@ -1,0 +1,12 @@
+ARG CONTAINER_BASE="fedora:39"
+
+FROM $CONTAINER_BASE
+
+# Enable EPEL
+RUN dnf -y install https://dl.fedoraproject.org/pub/epel/epel{,-next}-release-latest-9.noarch.rpm
+
+RUN dnf install -y sysbench \
+    && dnf -y update \
+    && dnf clean all
+
+ENTRYPOINT [ "/usr/bin/sysbench" ]

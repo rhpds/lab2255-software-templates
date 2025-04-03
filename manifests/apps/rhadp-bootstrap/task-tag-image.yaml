@@ -1,0 +1,35 @@
+kind: ClusterTask
+apiVersion: tekton.dev/v1beta1
+metadata:
+  name: tag-image
+spec:
+  description: Nothing to do
+  params:
+    - name: source-image-tag
+      description: URL of the image to be copied to the destination registry
+      type: string
+      default: ""
+    - name: target-image-tag
+      description: URL of the image where the image from source should be copied to
+      type: string
+      default: ""
+  steps:
+    - name: tag-image
+      image: quay.io/skopeo/stable:latest
+      env:
+        - name: HOME
+          value: /tekton/home
+      resources: {}
+      script: |
+        #!/usr/bin/env bash
+
+        skopeo copy --authfile=/workspace/dockerconfig/config.json docker://$(params.source-image-tag) docker://$(params.target-image-tag)
+
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 65532
+
+  workspaces:
+    - name: dockerconfig
+      description: Includes a docker `config.json`
+      optional: true

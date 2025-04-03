@@ -1,0 +1,51 @@
+schemaVersion: 2.3.0
+metadata:
+  name: ${{values.component_id}}-autosd-app
+  tags:
+    - automotive
+    - rhivos
+    - jumpstarter
+components:
+  - name: runtime
+    container:
+      image: quay.io/jumpstarter-dev/jumpstarter-devspace:latest
+      memoryLimit: "4Gi"
+      memoryRequest: "1Gi"
+      cpuLimit: "4"
+      cpuRequest: "1"
+      mountSources: true
+      env:
+        - name: JUMPSTARTER_GRPC_INSECURE
+          value: "1"
+commands:
+  - id: configure-jumpstarter-client
+    exec:
+      component: runtime
+      commandLine: |
+        # create jumpstarter client config directories
+        mkdir -p ~/.config/jumpstarter/clients/
+
+        # generate jumpstarter user config
+        cat > ~/.config/jumpstarter/config.yaml <<EOF
+        apiVersion: jumpstarter.dev/v1alpha1
+        kind: UserConfig
+        config:
+          current-client: lab
+        EOF
+
+        # generate jumpstarter client config
+        cat > ~/.config/jumpstarter/clients/lab.yaml <<EOF
+        apiVersion: jumpstarter.dev/v1alpha1
+        kind: ClientConfig
+        metadata:
+          namespace: jumpstarter-qemu-exporter
+          name: $(sed "s|-devspaces||" /run/secrets/kubernetes.io/serviceaccount/namespace)
+        endpoint: grpc.${CHE_DASHBOARD_URL#"https://devspaces."}:443
+        token: $(cat /var/run/secrets/kubernetes.io/serviceaccount/token)
+        drivers:
+          allow: []
+          unsafe: True
+        EOF
+events:
+  postStart:
+    - configure-jumpstarter-client

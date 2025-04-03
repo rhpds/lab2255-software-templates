@@ -1,0 +1,54 @@
+# Implement your install deployment tasks here
+# -------------------------------------------------
+
+- name: lookup group id
+  uri:
+    url: https://{{ gitlab_host }}/api/v4/groups?search={{ templates_repo_group }}
+    method: GET
+    validate_certs: false
+  register: r_group
+  until: r_group.status == 200 or r_group.status == 403
+  retries: 5
+  delay: 10
+
+- name: register group id
+  set_fact:
+    group_id: "{{ r_group.json[0].id }}"
+  when: r_group.status == 200
+
+- name: create a new project
+  uri:
+    url: https://{{ gitlab_host }}/api/v4/projects/
+    method: POST
+    body_format: form-urlencoded
+    body:
+      name: "{{ templates_repo_name }}"
+      path: "{{ templates_repo_name }}"
+      namespace_id: "{{ group_id }}"
+      visibility: "public"
+      import_url: "{{ templates_repo_url }}.git"
+    headers:
+      PRIVATE-TOKEN: "{{ gitlab_token }}"
+    validate_certs: false
+    status_code: 201
+  register: r_project
+  retries: 5
+  delay: 30
+
+- name: register project id
+  set_fact:
+    bootstrap_project_id: "{{ r_project.json.id }}"
+  when: r_project.status == 201
+
+- name: wait for import to complete
+  uri:
+    url: https://{{ gitlab_host }}/api/v4/projects/{{ bootstrap_project_id }}/import
+    method: GET
+    headers:
+      PRIVATE-TOKEN: "{{ gitlab_token }}"
+    validate_certs: false
+    return_content: true
+  register: r_import_status
+  until: r_import_status.json.import_status == "finished"
+  retries: 30
+  delay: 30

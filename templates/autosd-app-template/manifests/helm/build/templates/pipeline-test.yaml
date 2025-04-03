@@ -1,0 +1,88 @@
+---
+apiVersion: tekton.dev/v1beta1
+kind: Pipeline
+metadata:
+  name: {{ .Values.app.name }}-test
+  labels:
+    type: pipeline
+    backstage.io/kubernetes-id: {{ .Values.app.name }}
+spec:
+  params:
+    - name: source-repo
+      description: source repo that contains the application code
+      type: string
+    - name: source-branch
+      description: source branch to build from
+      type: string
+    - name: tag
+      type: string
+    - description: Component id
+      name: component-id
+      type: string
+  tasks:
+    - name: git-clone
+      params:
+        - name: url
+          value: $(params.source-repo)
+        - name: revision
+          value: $(params.source-branch)
+      taskRef:
+        kind: ClusterTask
+        name: git-clone
+      workspaces:
+        - name: output
+          workspace: source-folder
+    
+    - name: automotive-image-builder
+      params:
+        - name: job_id
+          value: $(params.source-branch)
+        - name: component_id
+          value: $(params.component-id)
+      taskRef:
+        kind: ClusterTask
+        name: aib-builder-task
+      runAfter:
+        - git-clone
+      workspaces:
+        - name: source
+          workspace: source-folder
+
+    - name: cdn-upload
+      params:
+        - name: job_id
+          value: $(params.source-branch)
+        - name: component_id
+          value: $(params.component-id)
+      runAfter:
+        - automotive-image-builder
+      taskRef:
+        kind: ClusterTask
+        name: s3-upload-task
+      workspaces:
+        - name: source
+          workspace: source-folder
+
+    - name: jmp-flash-qemu
+      taskRef:
+        kind: ClusterTask
+        name: noop
+      runAfter:
+        - cdn-upload
+      workspaces:
+        - name: source
+          workspace: source-folder
+
+    - name: jmp-test
+      taskRef:
+        kind: ClusterTask
+        name: noop
+      runAfter:
+        - jmp-flash-qemu
+      workspaces:
+        - name: source
+          workspace: source-folder
+
+  workspaces:
+    - name: source-folder
+    - name: docker-config
